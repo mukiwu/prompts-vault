@@ -4,6 +4,15 @@
  */
 
 // ==========================================
+// Google Analytics Event Tracking
+// ==========================================
+function trackEvent(eventName, params = {}) {
+  if (typeof gtag === 'function') {
+    gtag('event', eventName, params);
+  }
+}
+
+// ==========================================
 // GitHub Configuration
 // ==========================================
 const GITHUB_CONFIG = {
@@ -111,6 +120,7 @@ function switchLanguage(lang) {
 // Toggle language
 function toggleLanguage() {
   const newLang = currentLang === 'zh-TW' ? 'en' : 'zh-TW';
+  trackEvent('switch_language', { language: newLang });
   switchLanguage(newLang);
 }
 
@@ -401,6 +411,7 @@ function initEventListeners() {
       document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
       pill.classList.add('active');
       currentFilter = pill.dataset.category;
+      trackEvent('filter_category', { category: currentFilter });
       renderPrompts();
     });
   });
@@ -418,9 +429,17 @@ function initEventListeners() {
 
   // Search
   const searchInput = document.getElementById('search-input');
+  let searchTimeout;
   searchInput.addEventListener('input', (e) => {
     searchQuery = e.target.value.toLowerCase();
     renderPrompts();
+    // Debounced search tracking
+    clearTimeout(searchTimeout);
+    if (searchQuery) {
+      searchTimeout = setTimeout(() => {
+        trackEvent('search', { search_term: searchQuery });
+      }, 1000);
+    }
   });
 
   // Keyboard shortcut for search
@@ -592,11 +611,11 @@ function updateStats() {
   const thisMonthEl = document.getElementById('total-copies');
 
   if (totalPromptsEl) totalPromptsEl.textContent = prompts.length;
-  
+
   // Total reactions (likes) across all prompts
   const totalReactions = prompts.reduce((sum, p) => sum + (p.reactions || 0), 0);
   if (totalReactionsEl) totalReactionsEl.textContent = totalReactions;
-  
+
   // Count prompts created this month
   const now = new Date();
   const thisMonth = prompts.filter(p => {
@@ -627,6 +646,11 @@ function openDetail(id) {
   if (!prompt) return;
 
   currentPromptId = id;
+  trackEvent('view_prompt', { 
+    prompt_id: id, 
+    prompt_title: prompt.title,
+    category: prompt.category 
+  });
 
   document.getElementById('detail-title').textContent = prompt.title;
   document.getElementById('detail-category').textContent = getCategoryName(prompt.category);
@@ -735,6 +759,10 @@ function switchDetailImage(src, element) {
 function openCurrentIssue() {
   const prompt = prompts.find(p => p.id === currentPromptId);
   if (prompt && prompt.issueUrl) {
+    trackEvent('like_prompt', { 
+      prompt_id: currentPromptId,
+      prompt_title: prompt.title
+    });
     window.open(prompt.issueUrl, '_blank');
   }
 }
@@ -750,8 +778,8 @@ function editCurrentIssue() {
 function deleteCurrentIssue() {
   const prompt = prompts.find(p => p.id === currentPromptId);
   if (prompt && prompt.issueUrl) {
-    const confirmMsg = currentLang === 'zh-TW' 
-      ? '刪除需要到 GitHub 操作，確定要前往嗎？' 
+    const confirmMsg = currentLang === 'zh-TW'
+      ? '刪除需要到 GitHub 操作，確定要前往嗎？'
       : 'Delete requires GitHub access. Go to GitHub?';
     if (confirm(confirmMsg)) {
       window.open(prompt.issueUrl, '_blank');
@@ -777,6 +805,7 @@ function copyCurrentPrompt() {
 }
 
 function openSubmitPage() {
+  trackEvent('add_prompt', { language: currentLang });
   const { owner, repo } = GITHUB_CONFIG;
   const template = t('issueTemplate');
   const url = `https://github.com/${owner}/${repo}/issues/new?template=${template}`;
@@ -793,6 +822,11 @@ function escapeHtml(text) {
 }
 
 function copyToClipboard(text) {
+  const prompt = prompts.find(p => p.id === currentPromptId);
+  trackEvent('copy_prompt', { 
+    prompt_id: currentPromptId,
+    prompt_title: prompt?.title || 'unknown'
+  });
   navigator.clipboard.writeText(text).then(() => {
     showToast(t('copied'));
   }).catch(() => {

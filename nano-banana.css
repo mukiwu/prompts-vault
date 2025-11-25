@@ -1580,3 +1580,89 @@ body {
     color: #000;
 }
 
+/* ==========================================
+   Ad Containers (Google AdSense)
+   ========================================== */
+.ad-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.ad-placeholder {
+    background: var(--bg-secondary);
+    border: 1px dashed var(--border-subtle);
+    border-radius: var(--radius-md);
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.ad-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Top Banner Ad */
+.ad-top-banner {
+    margin-top: 16px;
+}
+
+.ad-top-banner .ad-placeholder {
+    min-height: 90px;
+}
+
+/* Bottom Banner Ad */
+.ad-bottom-banner {
+    margin: 32px auto;
+}
+
+.ad-bottom-banner .ad-placeholder {
+    min-height: 90px;
+}
+
+/* Detail Modal Ad */
+.ad-detail {
+    margin-top: 24px;
+    padding: 0;
+}
+
+.ad-detail .ad-placeholder {
+    min-height: 100px;
+}
+
+/* In-feed Ad (between cards) */
+.ad-in-feed {
+    grid-column: 1 / -1;
+}
+
+.ad-in-feed .ad-placeholder {
+    min-height: 120px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .ad-container {
+        padding: 0 16px;
+    }
+    
+    .ad-placeholder {
+        min-height: 60px;
+    }
+    
+    .ad-top-banner .ad-placeholder,
+    .ad-bottom-banner .ad-placeholder {
+        min-height: 60px;
+    }
+}
+
+/* Hide ads when empty (before AdSense loads) */
+.ad-container:empty {
+    display: none;
+}
+
