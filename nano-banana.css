@@ -1194,12 +1194,14 @@ body {
 }
 
 /* Detail Image Loading */
-.detail-image img {
+.detail-image > img,
+.detail-main-image > img {
     opacity: 0;
     transition: opacity 0.3s ease;
 }
 
-.detail-image img.loaded {
+.detail-image > img.loaded,
+.detail-main-image > img.loaded {
     opacity: 1;
 }
 
