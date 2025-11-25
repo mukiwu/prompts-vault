@@ -32,7 +32,7 @@ const i18n = {
     // Stats
     prompts: '提示詞',
     favorites: '讚',
-    copies: '分類',
+    copies: '本月新增',
     // Card & Detail
     copy: '複製',
     copied: '已複製到剪貼簿 📋',
@@ -70,7 +70,7 @@ const i18n = {
     // Stats
     prompts: 'Prompts',
     favorites: 'Likes',
-    copies: 'Categories',
+    copies: 'This Month',
     // Card & Detail
     copy: 'Copy',
     copied: 'Copied to clipboard 📋',
@@ -326,7 +326,12 @@ function parseIssueToPrompt(issue) {
     const getValue = (label) => {
       const regex = new RegExp(`### ${label}\\s*\\n\\s*([\\s\\S]*?)(?=\\n###|$)`, 'i');
       const match = body.match(regex);
-      return match ? match[1].trim() : '';
+      if (!match) return '';
+      // Clean up the value - remove empty lines and trim
+      const value = match[1].trim();
+      // Return empty if value is just whitespace or newlines
+      if (!value || /^\s*$/.test(value)) return '';
+      return value;
     };
 
     const title = getValue('提示詞名稱') || issue.title.replace('[Prompt]', '').trim();
@@ -469,6 +474,8 @@ function initEventListeners() {
   // Detail actions
   document.getElementById('copy-prompt-btn').addEventListener('click', copyCurrentPrompt);
   document.getElementById('detail-favorite').addEventListener('click', openCurrentIssue);
+  document.getElementById('detail-edit').addEventListener('click', editCurrentIssue);
+  document.getElementById('detail-delete').addEventListener('click', deleteCurrentIssue);
 }
 
 // ==========================================
@@ -580,7 +587,7 @@ function onDetailImageError(img) {
 function updateStats() {
   const totalPromptsEl = document.getElementById('total-prompts');
   const totalReactionsEl = document.getElementById('total-favorites');
-  const totalCategoriesEl = document.getElementById('total-copies');
+  const thisMonthEl = document.getElementById('total-copies');
 
   if (totalPromptsEl) totalPromptsEl.textContent = prompts.length;
   
@@ -588,8 +595,13 @@ function updateStats() {
   const totalReactions = prompts.reduce((sum, p) => sum + (p.reactions || 0), 0);
   if (totalReactionsEl) totalReactionsEl.textContent = totalReactions;
   
-  // Total categories
-  if (totalCategoriesEl) totalCategoriesEl.textContent = Object.keys(categoryNames).length;
+  // Count prompts created this month
+  const now = new Date();
+  const thisMonth = prompts.filter(p => {
+    const created = new Date(p.createdAt);
+    return created.getMonth() === now.getMonth() && created.getFullYear() === now.getFullYear();
+  }).length;
+  if (thisMonthEl) thisMonthEl.textContent = thisMonth;
 }
 
 // ==========================================
@@ -722,6 +734,26 @@ function openCurrentIssue() {
   const prompt = prompts.find(p => p.id === currentPromptId);
   if (prompt && prompt.issueUrl) {
     window.open(prompt.issueUrl, '_blank');
+  }
+}
+
+function editCurrentIssue() {
+  const prompt = prompts.find(p => p.id === currentPromptId);
+  if (prompt && prompt.issueUrl) {
+    // GitHub Issue edit URL format
+    window.open(prompt.issueUrl, '_blank');
+  }
+}
+
+function deleteCurrentIssue() {
+  const prompt = prompts.find(p => p.id === currentPromptId);
+  if (prompt && prompt.issueUrl) {
+    const confirmMsg = currentLang === 'zh-TW' 
+      ? '刪除需要到 GitHub 操作，確定要前往嗎？' 
+      : 'Delete requires GitHub access. Go to GitHub?';
+    if (confirm(confirmMsg)) {
+      window.open(prompt.issueUrl, '_blank');
+    }
   }
 }
 
