@@ -372,8 +372,8 @@ function parseIssueToPrompt(issue) {
       category,
       tags,
       images,
-      author: author !== '_No response_' ? author : '',
-      authorUrl: authorUrl !== '_No response_' ? authorUrl : '',
+      author: (author && author !== '_No response_' && author.trim()) ? author.trim() : '',
+      authorUrl: (authorUrl && authorUrl !== '_No response_' && authorUrl.trim()) ? authorUrl.trim() : '',
       issueUrl: issue.html_url,
       createdAt: issue.created_at,
       reactions: issue.reactions?.total_count || 0
@@ -618,18 +618,20 @@ function openDetail(id) {
   document.getElementById('detail-category').textContent = getCategoryName(prompt.category);
   document.getElementById('detail-prompt').textContent = prompt.prompt;
 
-  // Author info
+  // Author info - only show if author name exists and is not empty
   const authorContainer = document.getElementById('detail-author');
-  if (prompt.author) {
+  const authorName = prompt.author?.trim();
+  if (authorName && authorName.length > 0) {
     let authorHtml = `<span class="author-label">${t('author')}</span>`;
-    if (prompt.authorUrl) {
-      authorHtml += `<a href="${prompt.authorUrl}" target="_blank" rel="noopener noreferrer" class="author-link">${escapeHtml(prompt.author)}</a>`;
+    if (prompt.authorUrl?.trim()) {
+      authorHtml += `<a href="${prompt.authorUrl}" target="_blank" rel="noopener noreferrer" class="author-link">${escapeHtml(authorName)}</a>`;
     } else {
-      authorHtml += `<span class="author-name">${escapeHtml(prompt.author)}</span>`;
+      authorHtml += `<span class="author-name">${escapeHtml(authorName)}</span>`;
     }
     authorContainer.innerHTML = authorHtml;
     authorContainer.style.display = 'flex';
   } else {
+    authorContainer.innerHTML = '';
     authorContainer.style.display = 'none';
   }
 
