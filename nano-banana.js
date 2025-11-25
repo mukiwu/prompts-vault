@@ -211,18 +211,36 @@ function initEventListeners() {
   document.querySelectorAll('.modal-close').forEach(btn => {
     btn.addEventListener('click', () => {
       closeModal('modal-overlay');
-      closeModal('detail-overlay');
     });
   });
 
+  // Detail modal close button
+  const detailCloseBtn = document.getElementById('detail-close');
+  if (detailCloseBtn) {
+    detailCloseBtn.addEventListener('click', () => {
+      closeModal('detail-overlay');
+    });
+  }
+
   // Modal backdrop click
-  document.querySelectorAll('.modal-overlay').forEach(overlay => {
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) {
-        closeModal(overlay.id);
+  const modalOverlay = document.getElementById('modal-overlay');
+  if (modalOverlay) {
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) {
+        closeModal('modal-overlay');
       }
     });
-  });
+  }
+
+  // Detail overlay backdrop click
+  const detailOverlay = document.getElementById('detail-overlay');
+  if (detailOverlay) {
+    detailOverlay.addEventListener('click', (e) => {
+      if (e.target === detailOverlay) {
+        closeModal('detail-overlay');
+      }
+    });
+  }
 
   // Detail actions
   document.getElementById('copy-prompt-btn').addEventListener('click', copyCurrentPrompt);
@@ -272,28 +290,23 @@ function renderPromptCard(prompt) {
       <div class="card-image ${!hasImage ? 'no-image' : ''}">
         ${hasImage
       ? `<img src="${prompt.images[0]}" alt="${prompt.title}" loading="lazy">`
-      : `<span class="placeholder-icon">🍌</span>`
+      : `<span class="card-placeholder">🍌</span>`
     }
-        ${imageCount > 1 ? `<span class="image-count">+${imageCount - 1}</span>` : ''}
+        ${imageCount > 1 ? `<span class="card-image-count">+${imageCount - 1}</span>` : ''}
       </div>
-      <div class="card-content">
-        <div class="card-header">
-          <span class="card-category">${icon}</span>
-          <h3 class="card-title">${escapeHtml(prompt.title)}</h3>
-        </div>
-        <p class="card-prompt">${escapeHtml(prompt.prompt)}</p>
+      <div class="card-body">
+        <h3 class="card-title">${escapeHtml(prompt.title)}</h3>
+        <p class="card-preview">${escapeHtml(prompt.prompt)}</p>
         <div class="card-footer">
           <div class="card-tags">
-            ${prompt.tags.slice(0, 3).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
+            ${prompt.tags.slice(0, 3).map(t => `<span class="card-tag">${escapeHtml(t)}</span>`).join('')}
           </div>
-          <div class="card-actions">
-            <button class="card-btn" onclick="event.stopPropagation(); quickCopy(${prompt.id})" title="複製">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="9" y="9" width="13" height="13" rx="2"/>
-                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-              </svg>
-            </button>
-          </div>
+          <button class="card-copy-btn" onclick="event.stopPropagation(); quickCopy(${prompt.id})" title="複製">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2"/>
+              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+            </svg>
+          </button>
         </div>
       </div>
     </div>
