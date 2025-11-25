@@ -888,11 +888,20 @@ function openLightbox(images, startIndex = 0) {
   
   const overlay = document.getElementById('lightbox-overlay');
   const img = document.getElementById('lightbox-image');
+  const loader = document.getElementById('lightbox-loader');
   const counter = document.getElementById('lightbox-counter');
   const prevBtn = document.getElementById('lightbox-prev');
   const nextBtn = document.getElementById('lightbox-next');
   
-  // Use optimized URL for lightbox
+  // Show loading, hide image
+  img.classList.remove('loaded');
+  if (loader) loader.classList.remove('hidden');
+  
+  // Load image
+  img.onload = () => {
+    img.classList.add('loaded');
+    if (loader) loader.classList.add('hidden');
+  };
   img.src = getOptimizedUrl(lightboxImages[lightboxIndex], 1200);
   
   // Update counter
@@ -916,8 +925,18 @@ function openLightbox(images, startIndex = 0) {
 
 function closeLightbox() {
   const overlay = document.getElementById('lightbox-overlay');
+  const img = document.getElementById('lightbox-image');
+  const loader = document.getElementById('lightbox-loader');
+  
   overlay.classList.remove('active');
   document.body.style.overflow = '';
+  
+  // Clear image after animation completes to prevent showing old image
+  setTimeout(() => {
+    img.src = '';
+    img.classList.remove('loaded');
+    if (loader) loader.classList.remove('hidden');
+  }, 300);
 }
 
 function lightboxPrev() {
@@ -936,15 +955,19 @@ function lightboxNext() {
 
 function updateLightboxImage() {
   const img = document.getElementById('lightbox-image');
+  const loader = document.getElementById('lightbox-loader');
   const counter = document.getElementById('lightbox-counter');
   
-  img.style.opacity = '0';
-  setTimeout(() => {
-    img.src = getOptimizedUrl(lightboxImages[lightboxIndex], 1200);
-    img.onload = () => {
-      img.style.opacity = '1';
-    };
-  }, 150);
+  // Show loading
+  img.classList.remove('loaded');
+  if (loader) loader.classList.remove('hidden');
+  
+  // Load new image
+  img.onload = () => {
+    img.classList.add('loaded');
+    if (loader) loader.classList.add('hidden');
+  };
+  img.src = getOptimizedUrl(lightboxImages[lightboxIndex], 1200);
   
   counter.textContent = `${lightboxIndex + 1} / ${lightboxImages.length}`;
   updateLightboxNav();
