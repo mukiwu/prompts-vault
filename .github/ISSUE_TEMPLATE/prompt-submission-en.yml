@@ -1,0 +1,71 @@
+name: 🍌 Submit Prompt
+description: Share your Nano Banana prompt
+title: "[Prompt] "
+labels: ["pending"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for submitting a prompt! Fill in the details below, and it will appear on the website after approval.
+
+  - type: input
+    id: title
+    attributes:
+      label: Prompt Name
+      description: Give this prompt a memorable name
+      placeholder: e.g., Dreamy Forest Spirit
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: Choose the most appropriate category
+      options:
+        - Portrait & Character
+        - Photo Editing
+        - Style Transfer
+        - Creative Design
+        - Product Photography
+    validations:
+      required: true
+
+  - type: textarea
+    id: prompt
+    attributes:
+      label: Prompt Content
+      description: The complete prompt
+      placeholder: |
+        ethereal forest spirit, bioluminescent plants, magical atmosphere...
+    validations:
+      required: true
+
+  - type: input
+    id: tags
+    attributes:
+      label: Tags
+      description: Comma-separated for easy searching
+      placeholder: e.g., fantasy, spirit, forest
+
+  - type: textarea
+    id: image
+    attributes:
+      label: Preview Image (Optional)
+      description: Drag and drop images here! (Supports multiple images)
+      placeholder: Drag images here, GitHub will auto-upload and generate links
+
+  - type: input
+    id: author
+    attributes:
+      label: Author Name (Optional)
+      description: Your name or nickname
+      placeholder: Your name
+
+  - type: input
+    id: author_url
+    attributes:
+      label: Author Website (Optional)
+      description: Your personal website or social link
+      placeholder: https://...
+

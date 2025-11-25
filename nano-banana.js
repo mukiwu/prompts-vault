@@ -13,6 +13,170 @@ const GITHUB_CONFIG = {
 };
 
 // ==========================================
+// i18n (Internationalization)
+// ==========================================
+let currentLang = localStorage.getItem('lang') || 'zh-TW';
+
+const i18n = {
+  'zh-TW': {
+    // Header
+    searchPlaceholder: '搜尋提示詞...',
+    addPrompt: '新增提示詞',
+    // Categories
+    all: '全部',
+    portrait: '人像角色',
+    photoEdit: '照片編輯',
+    style: '風格轉換',
+    design: '創意設計',
+    product: '產品攝影',
+    // Stats
+    prompts: '提示詞',
+    favorites: '收藏',
+    copies: '複製次數',
+    // Card & Detail
+    copy: '複製',
+    copied: '已複製到剪貼簿 📋',
+    author: '投稿者：',
+    promptLabel: '✨ 提示詞',
+    viewOnGitHub: 'GitHub',
+    edit: '✏️ 編輯',
+    delete: '🗑️ 刪除',
+    // Loading states
+    loading: '載入中...',
+    loadingImage: '載入圖片中...',
+    loadFailed: '載入失敗，請稍後再試',
+    retry: '重新載入',
+    // Empty state
+    noPrompts: '還沒有提示詞',
+    noPromptsHint: '點擊「新增提示詞」開始收集你的創意',
+    addFirstPrompt: '+ 新增第一個提示詞',
+    // View
+    gridView: '網格檢視',
+    listView: '列表檢視',
+    // Issue template
+    issueTemplate: 'prompt-submission.yml'
+  },
+  'en': {
+    // Header
+    searchPlaceholder: 'Search prompts...',
+    addPrompt: 'Add Prompt',
+    // Categories
+    all: 'All',
+    portrait: 'Portrait',
+    photoEdit: 'Photo Edit',
+    style: 'Style Transfer',
+    design: 'Design',
+    product: 'Product',
+    // Stats
+    prompts: 'Prompts',
+    favorites: 'Favorites',
+    copies: 'Copies',
+    // Card & Detail
+    copy: 'Copy',
+    copied: 'Copied to clipboard 📋',
+    author: 'By: ',
+    promptLabel: '✨ Prompt',
+    viewOnGitHub: 'GitHub',
+    edit: '✏️ Edit',
+    delete: '🗑️ Delete',
+    // Loading states
+    loading: 'Loading...',
+    loadingImage: 'Loading image...',
+    loadFailed: 'Failed to load. Please try again.',
+    retry: 'Retry',
+    // Empty state
+    noPrompts: 'No prompts yet',
+    noPromptsHint: 'Click "Add Prompt" to start collecting your ideas',
+    addFirstPrompt: '+ Add First Prompt',
+    // View
+    gridView: 'Grid View',
+    listView: 'List View',
+    // Issue template
+    issueTemplate: 'prompt-submission-en.yml'
+  }
+};
+
+// Get translation
+function t(key) {
+  return i18n[currentLang]?.[key] || i18n['zh-TW'][key] || key;
+}
+
+// Switch language
+function switchLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+  updateUILanguage();
+}
+
+// Toggle language
+function toggleLanguage() {
+  const newLang = currentLang === 'zh-TW' ? 'en' : 'zh-TW';
+  switchLanguage(newLang);
+}
+
+// Update all UI text based on current language
+function updateUILanguage() {
+  // Update language button
+  const langBtn = document.getElementById('lang-btn');
+  if (langBtn) {
+    langBtn.textContent = currentLang === 'zh-TW' ? 'EN' : '中';
+    langBtn.title = currentLang === 'zh-TW' ? 'Switch to English' : '切換為中文';
+  }
+
+  // Update search placeholder
+  const searchInput = document.getElementById('search-input');
+  if (searchInput) {
+    searchInput.placeholder = t('searchPlaceholder');
+  }
+
+  // Update add button
+  const addBtnText = document.querySelector('#add-btn span:last-child');
+  if (addBtnText) {
+    addBtnText.textContent = t('addPrompt');
+  }
+
+  // Update category pills
+  const categoryKeys = ['all', 'portrait', 'photoEdit', 'style', 'design', 'product'];
+  const pills = document.querySelectorAll('.pill');
+  pills.forEach((pill, index) => {
+    const textNode = pill.childNodes[pill.childNodes.length - 1];
+    if (textNode && textNode.nodeType === Node.TEXT_NODE) {
+      textNode.textContent = ' ' + t(categoryKeys[index]);
+    }
+  });
+
+  // Update stat labels
+  const statLabels = document.querySelectorAll('.stat-label');
+  const statKeys = ['prompts', 'favorites', 'copies'];
+  statLabels.forEach((label, index) => {
+    label.textContent = t(statKeys[index]);
+  });
+
+  // Update view buttons
+  const viewBtns = document.querySelectorAll('.view-btn');
+  viewBtns.forEach(btn => {
+    if (btn.dataset.view === 'grid') {
+      btn.title = t('gridView');
+    } else if (btn.dataset.view === 'list') {
+      btn.title = t('listView');
+    }
+  });
+
+  // Update empty state if visible
+  const emptyState = document.getElementById('empty-state');
+  if (emptyState && emptyState.style.display !== 'none') {
+    emptyState.querySelector('h3').textContent = t('noPrompts');
+    emptyState.querySelector('p').textContent = t('noPromptsHint');
+    emptyState.querySelector('.empty-add-btn').textContent = t('addFirstPrompt');
+  }
+
+  // Re-render prompts to update card text
+  if (prompts.length > 0) {
+    renderPrompts();
+  }
+}
+
+// ==========================================
 // State
 // ==========================================
 let prompts = [];
@@ -23,7 +187,7 @@ let currentView = 'grid';
 let isLoading = false;
 
 // ==========================================
-// Category Mapping
+// Category Mapping (supports both languages)
 // ==========================================
 const categoryNames = {
   'portrait': '◉ 人像角色',
@@ -32,6 +196,19 @@ const categoryNames = {
   'design': '★ 創意設計',
   'product': '▣ 產品攝影'
 };
+
+const categoryNamesEn = {
+  'portrait': '◉ Portrait',
+  'photo-edit': '◈ Photo Edit',
+  'style': '❖ Style Transfer',
+  'design': '★ Design',
+  'product': '▣ Product'
+};
+
+function getCategoryName(key) {
+  const names = currentLang === 'en' ? categoryNamesEn : categoryNames;
+  return names[key] || key;
+}
 
 const categoryIcons = {
   'portrait': '◉',
@@ -42,11 +219,18 @@ const categoryIcons = {
 };
 
 const categoryMap = {
+  // Chinese
   '人像角色': 'portrait',
   '照片編輯': 'photo-edit',
   '風格轉換': 'style',
   '創意設計': 'design',
-  '產品攝影': 'product'
+  '產品攝影': 'product',
+  // English
+  'Portrait & Character': 'portrait',
+  'Photo Editing': 'photo-edit',
+  'Style Transfer': 'style',
+  'Creative Design': 'design',
+  'Product Photography': 'product'
 };
 
 // 每個分類對應的建議標籤
@@ -63,6 +247,7 @@ const categoryTags = {
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
   initEventListeners();
+  updateUILanguage();
   loadPromptsFromGitHub();
 });
 
@@ -78,7 +263,7 @@ async function loadPromptsFromGitHub() {
   container.innerHTML = `
     <div class="loading-state">
       <div class="loading-spinner">🍌</div>
-      <p>載入中...</p>
+      <p>${t('loading')}</p>
     </div>
   `;
   emptyState.style.display = 'none';
@@ -109,8 +294,8 @@ async function loadPromptsFromGitHub() {
     container.innerHTML = `
       <div class="error-state">
         <span class="error-icon">⚠️</span>
-        <p>載入失敗，請稍後再試</p>
-        <button class="retry-btn" onclick="loadPromptsFromGitHub()">重新載入</button>
+        <p>${t('loadFailed')}</p>
+        <button class="retry-btn" onclick="loadPromptsFromGitHub()">${t('retry')}</button>
       </div>
     `;
   }
@@ -309,9 +494,13 @@ function renderPromptCard(prompt) {
 
   return `
     <div class="prompt-card" onclick="openDetail(${prompt.id})">
-      <div class="card-image ${!hasImage ? 'no-image' : ''}">
+      <div class="card-image ${!hasImage ? 'no-image' : ''}" id="card-image-${prompt.id}">
         ${hasImage
-      ? `<img src="${prompt.images[0]}" alt="${prompt.title}" loading="lazy">`
+      ? `<div class="image-loader">
+           <div class="spinner"></div>
+           <span class="loader-text">${t('loading').replace('...', '')}</span>
+         </div>
+         <img src="${prompt.images[0]}" alt="${prompt.title}" loading="lazy" onload="onImageLoad(this, ${prompt.id})" onerror="onImageError(this, ${prompt.id})">`
       : `<span class="card-placeholder">🍌</span>`
     }
         ${imageCount > 1 ? `<span class="card-image-count">+${imageCount - 1}</span>` : ''}
@@ -333,6 +522,41 @@ function renderPromptCard(prompt) {
       </div>
     </div>
   `;
+}
+
+// Image loading handlers
+function onImageLoad(img, id) {
+  img.classList.add('loaded');
+  const container = document.getElementById(`card-image-${id}`);
+  if (container) {
+    container.classList.add('loaded');
+  }
+}
+
+function onImageError(img, id) {
+  // Replace with placeholder on error
+  const container = document.getElementById(`card-image-${id}`);
+  if (container) {
+    container.innerHTML = '<span class="card-placeholder">🍌</span>';
+    container.classList.add('no-image');
+  }
+}
+
+// Detail modal image loading handlers
+function onDetailImageLoad(img) {
+  img.classList.add('loaded');
+  const loader = img.parentElement?.querySelector('.detail-image-loader');
+  if (loader) {
+    loader.style.display = 'none';
+  }
+}
+
+function onDetailImageError(img) {
+  const loader = img.parentElement?.querySelector('.detail-image-loader');
+  if (loader) {
+    loader.innerHTML = '<span class="card-placeholder">🍌</span>';
+  }
+  img.style.display = 'none';
 }
 
 function updateStats() {
@@ -370,7 +594,7 @@ function openDetail(id) {
   currentPromptId = id;
 
   document.getElementById('detail-title').textContent = prompt.title;
-  document.getElementById('detail-category').textContent = categoryNames[prompt.category] || prompt.category;
+  document.getElementById('detail-category').textContent = getCategoryName(prompt.category);
   document.getElementById('detail-prompt').textContent = prompt.prompt;
 
   // Author info
@@ -399,17 +623,27 @@ function openDetail(id) {
 
   if (images.length > 0) {
     if (images.length === 1) {
-      imageContainer.innerHTML = `<img src="${images[0]}" alt="${prompt.title}">`;
+      imageContainer.innerHTML = `
+        <div class="detail-image-loader">
+          <div class="spinner"></div>
+          <span>${t('loadingImage')}</span>
+        </div>
+        <img src="${images[0]}" alt="${prompt.title}" onload="onDetailImageLoad(this)" onerror="onDetailImageError(this)">
+      `;
     } else {
       imageContainer.innerHTML = `
         <div class="detail-image-gallery">
           <div class="detail-main-image">
-            <img src="${images[0]}" alt="${prompt.title}" id="main-preview-image">
+            <div class="detail-image-loader">
+              <div class="spinner"></div>
+              <span>${t('loadingImage')}</span>
+            </div>
+            <img src="${images[0]}" alt="${prompt.title}" id="main-preview-image" onload="onDetailImageLoad(this)" onerror="onDetailImageError(this)">
           </div>
           <div class="detail-thumbnails">
             ${images.map((img, i) => `
               <div class="detail-thumbnail ${i === 0 ? 'active' : ''}" onclick="switchDetailImage('${img}', this)">
-                <img src="${img}" alt="縮圖">
+                <img src="${img}" alt="">
               </div>
             `).join('')}
           </div>
@@ -422,8 +656,8 @@ function openDetail(id) {
 
   // Change favorite button to "View on GitHub"
   const favBtn = document.getElementById('detail-favorite');
-  favBtn.innerHTML = `<span class="heart">↗</span> GitHub`;
-  favBtn.title = '在 GitHub 上查看';
+  favBtn.innerHTML = `<span class="heart">↗</span> ${t('viewOnGitHub')}`;
+  favBtn.title = currentLang === 'zh-TW' ? '在 GitHub 上查看' : 'View on GitHub';
 
   openModal('detail-overlay');
 }
@@ -460,7 +694,8 @@ function copyCurrentPrompt() {
 
 function openSubmitPage() {
   const { owner, repo } = GITHUB_CONFIG;
-  const url = `https://github.com/${owner}/${repo}/issues/new?template=prompt-submission.yml`;
+  const template = t('issueTemplate');
+  const url = `https://github.com/${owner}/${repo}/issues/new?template=${template}`;
   window.open(url, '_blank');
 }
 
@@ -475,7 +710,7 @@ function escapeHtml(text) {
 
 function copyToClipboard(text) {
   navigator.clipboard.writeText(text).then(() => {
-    showToast('已複製到剪貼簿 📋');
+    showToast(t('copied'));
   }).catch(() => {
     const textarea = document.createElement('textarea');
     textarea.value = text;
@@ -483,7 +718,7 @@ function copyToClipboard(text) {
     textarea.select();
     document.execCommand('copy');
     document.body.removeChild(textarea);
-    showToast('已複製到剪貼簿 📋');
+    showToast(t('copied'));
   });
 }
 

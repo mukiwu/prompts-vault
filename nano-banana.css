@@ -248,6 +248,19 @@ body {
     color: var(--text-primary);
 }
 
+.lang-btn {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.lang-btn:hover {
+    background: var(--banana-yellow);
+    border-color: var(--banana-yellow);
+    color: #000;
+}
+
 .add-btn {
     display: flex;
     align-items: center;
@@ -445,15 +458,51 @@ body {
     height: 100%;
     object-fit: cover;
     transition: var(--transition-normal);
+    opacity: 0;
 }
 
-.prompt-card:hover .card-image img {
+.card-image img.loaded {
+    opacity: 1;
+}
+
+.prompt-card:hover .card-image img.loaded {
     transform: scale(1.05);
 }
 
 .card-placeholder {
     font-size: 48px;
     opacity: 0.3;
+}
+
+/* Image Loading Spinner */
+.card-image .image-loader {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.card-image .image-loader .spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border-subtle);
+    border-top-color: var(--banana-yellow);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.card-image .image-loader .loader-text {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.card-image.loaded .image-loader {
+    display: none;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
 
 .card-category {
@@ -1142,6 +1191,42 @@ body {
 .detail-image .no-image {
     font-size: 80px;
     opacity: 0.2;
+}
+
+/* Detail Image Loading */
+.detail-image img {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.detail-image img.loaded {
+    opacity: 1;
+}
+
+.detail-image-loader {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.detail-image-loader .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border-subtle);
+    border-top-color: var(--banana-yellow);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.detail-main-image {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .detail-right {
