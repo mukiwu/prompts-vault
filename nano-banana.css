@@ -1233,8 +1233,10 @@ body {
 
 .detail-right {
     padding: 32px;
-    overflow-y: auto;
+    overflow: hidden;
     max-height: 90vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .detail-header {
@@ -1286,6 +1288,10 @@ body {
 
 .detail-section {
     margin-bottom: 24px;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .section-header {
@@ -1332,6 +1338,9 @@ body {
     color: var(--text-secondary);
     white-space: pre-wrap;
     word-break: break-word;
+    flex: 1;
+    min-height: 100px;
+    overflow-y: auto;
 }
 
 .detail-tags {

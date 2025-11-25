@@ -341,14 +341,14 @@ function parseIssueToPrompt(issue) {
 
     const category = categoryMap[categoryName] || 'style';
     const tags = tagsStr ? tagsStr.split(',').map(t => t.trim()).filter(t => t) : [];
-    
+
     // Parse images from markdown format or direct URLs
     let images = [];
     if (imageContent && imageContent !== '_No response_') {
       // Match markdown image syntax: ![...](url) or direct URLs
       const markdownImageRegex = /!\[.*?\]\((https?:\/\/[^\s)]+)\)/g;
       const directUrlRegex = /(https?:\/\/(?:user-images\.githubusercontent\.com|github\.com\/user-attachments)[^\s<>"')\]]+)/g;
-      
+
       let match;
       while ((match = markdownImageRegex.exec(imageContent)) !== null) {
         images.push(match[1]);
@@ -682,26 +682,26 @@ function openDetail(id) {
 function switchDetailImage(src, element) {
   const mainImage = document.getElementById('main-preview-image');
   const loader = document.querySelector('.detail-main-image .detail-image-loader');
-  
+
   // Show loading state
   mainImage.classList.remove('loaded');
   if (loader) {
     loader.style.display = 'flex';
   }
-  
+
   // Update active thumbnail
   document.querySelectorAll('.detail-thumbnail').forEach(t => t.classList.remove('active'));
   element.classList.add('active');
-  
+
   // Load new image
   const newSrc = getOptimizedUrl(src);
-  mainImage.onload = function() {
+  mainImage.onload = function () {
     mainImage.classList.add('loaded');
     if (loader) {
       loader.style.display = 'none';
     }
   };
-  mainImage.onerror = function() {
+  mainImage.onerror = function () {
     if (loader) {
       loader.innerHTML = '<span class="card-placeholder">🍌</span>';
     }
