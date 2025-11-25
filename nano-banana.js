@@ -301,11 +301,15 @@ function renderPromptCard(prompt) {
 }
 
 function updateStats() {
-  document.getElementById('total-prompts').textContent = prompts.length;
-  document.getElementById('total-favorites').textContent = Object.keys(categoryNames).length;
+  const totalPromptsEl = document.getElementById('total-prompts');
+  const totalFavoritesEl = document.getElementById('total-favorites');
+  const totalCopiesEl = document.getElementById('total-copies');
+
+  if (totalPromptsEl) totalPromptsEl.textContent = prompts.length;
+  if (totalFavoritesEl) totalFavoritesEl.textContent = Object.keys(categoryNames).length;
 
   const totalReactions = prompts.reduce((sum, p) => sum + (p.reactions || 0), 0);
-  document.getElementById('total-copies').textContent = totalReactions;
+  if (totalCopiesEl) totalCopiesEl.textContent = totalReactions;
 }
 
 // ==========================================
