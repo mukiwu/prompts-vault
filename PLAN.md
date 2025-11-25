@@ -81,7 +81,9 @@ git push -u origin main
 - [x] 推送到 GitHub
 - [x] 啟用 GitHub Pages（網址：https://mukiwu.github.io/prompts-vault/）
 - [x] 建立 Labels（`approved` + `pending`）
-- [ ] 建立第一個測試 Issue（可選）
+- [x] 建立第一個測試 Issue（「夢幻森林精靈」）
+- [x] 修復 isLoading 狀態 bug
+- [x] 新增 updateStats() null 檢查
 
 ### 優先級：中
 
