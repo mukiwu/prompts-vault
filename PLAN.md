@@ -20,16 +20,68 @@
 - [x] 一鍵複製提示詞
 - [x] 響應式設計
 - [x] README 文件（英文 + 中文）
+- [x] Git 初始化與首次 commit
 
 ---
 
 ## 🔜 待辦事項
 
-### 優先級：高
+### 優先級：高（按以下步驟完成）
 
-- [ ] 推送到 GitHub
-- [ ] 啟用 GitHub Pages
-- [ ] 建立第一個測試 Issue 並加上 `approved` label 測試
+#### Step 1: 建立 GitHub Repository
+
+1. 前往 [GitHub 建立新 Repository](https://github.com/new)
+2. Repository name: `prompts-vault`
+3. 設為 **Public**
+4. **不要** 勾選 "Add a README file"（我們已經有了）
+5. 點擊 "Create repository"
+
+#### Step 2: 推送程式碼
+
+在終端機執行：
+
+```bash
+cd /Users/muki/Documents/01.project/prompts-vault
+git push -u origin main
+```
+
+#### Step 3: 啟用 GitHub Pages
+
+1. 前往 Repository → **Settings** → **Pages**
+2. Source: 選擇 **Deploy from a branch**
+3. Branch: 選擇 **main** / **root**
+4. 點擊 **Save**
+5. 等待幾分鐘，網站就會上線在 https://mukiwu.github.io/prompts-vault
+
+#### Step 4: 設定 Labels
+
+前往 Repository → **Issues** → **Labels**，建立以下 labels：
+
+| Label | 顏色 | 說明 |
+|-------|------|------|
+| `approved` | `#10B981` | ✅ 已審核，會顯示在網站 |
+| `pending` | `#FEF3C7` | ⏳ 待審核（預設） |
+
+#### Step 5: 建立測試 Issue
+
+1. 點擊 [Issues] → [New Issue]
+2. 選擇「🍌 投稿提示詞」模板
+3. 填寫測試資料：
+   - 名稱：`夢幻森林精靈`
+   - 分類：`人像角色`
+   - 提示詞：`ethereal forest spirit, bioluminescent plants, magical atmosphere, soft lighting, fantasy art style`
+   - 標籤：`奇幻, 精靈, 森林`
+4. 送出後，到該 Issue 右側 Labels 區塊，加上 `approved` label
+5. 回到網站重新整理，就會看到這個提示詞了！
+
+---
+
+### ⏳ 等待完成
+
+- [ ] 推送到 GitHub（執行 Step 2）
+- [ ] 啟用 GitHub Pages（執行 Step 3）
+- [ ] 建立 Labels（執行 Step 4）
+- [ ] 建立第一個測試 Issue（執行 Step 5）
 
 ### 優先級：中
 
