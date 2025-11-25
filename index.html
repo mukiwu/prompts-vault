@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🍌 Nano Banana Prompts Vault</title>
+  <link rel="stylesheet" href="nano-banana.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+  <!-- Background Effects -->
+  <div class="banana-background">
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    <div class="floating-bananas"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="header-content">
+      <div class="logo">
+        <span class="logo-emoji">🍌</span>
+        <div class="logo-text">
+          <span class="logo-main">Nano Banana</span>
+          <span class="logo-sub">Prompts Vault</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <div class="search-box">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <circle cx="11" cy="11" r="8" />
+            <path d="M21 21l-4.35-4.35" />
+          </svg>
+          <input type="text" placeholder="搜尋提示詞..." id="search-input">
+          <kbd class="search-kbd">⌘K</kbd>
+        </div>
+
+        <a href="https://github.com/mukiwu" target="_blank" rel="noopener noreferrer" class="header-btn" title="GitHub">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+          </svg>
+        </a>
+
+        <button class="add-btn" id="add-btn">
+          <span class="add-icon">+</span>
+          <span>新增提示詞</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Quick Tools Bar -->
+  <section class="quick-tools">
+    <div class="tools-content">
+      <div class="category-pills">
+        <button class="pill active" data-category="all">
+          <span class="pill-icon">✦</span>
+          全部
+        </button>
+        <button class="pill" data-category="portrait">
+          <span class="pill-icon">◉</span>
+          人像角色
+        </button>
+        <button class="pill" data-category="photo-edit">
+          <span class="pill-icon">◈</span>
+          照片編輯
+        </button>
+        <button class="pill" data-category="style">
+          <span class="pill-icon">❖</span>
+          風格轉換
+        </button>
+        <button class="pill" data-category="design">
+          <span class="pill-icon">★</span>
+          創意設計
+        </button>
+        <button class="pill" data-category="product">
+          <span class="pill-icon">▣</span>
+          產品攝影
+        </button>
+      </div>
+
+      <div class="view-options">
+        <button class="view-btn active" data-view="grid" title="網格檢視">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="3" y="3" width="7" height="7" rx="1" />
+            <rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" />
+            <rect x="14" y="14" width="7" height="7" rx="1" />
+          </svg>
+        </button>
+        <button class="view-btn" data-view="list" title="列表檢視">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="3" y="4" width="18" height="4" rx="1" />
+            <rect x="3" y="10" width="18" height="4" rx="1" />
+            <rect x="3" y="16" width="18" height="4" rx="1" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Bar -->
+  <section class="stats-bar">
+    <div class="stat">
+      <span class="stat-value" id="total-prompts">0</span>
+      <span class="stat-label">提示詞</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value" id="total-favorites">0</span>
+      <span class="stat-label">收藏</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value" id="total-copies">0</span>
+      <span class="stat-label">複製次數</span>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="prompts-container" id="prompts-container">
+      <!-- Generated by JS -->
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="empty-state" style="display: none;">
+      <div class="empty-banana">🍌</div>
+      <h3>還沒有提示詞</h3>
+      <p>點擊「新增提示詞」開始收集你的創意</p>
+      <button class="empty-add-btn" onclick="document.getElementById('add-btn').click()">
+        + 新增第一個提示詞
+      </button>
+    </div>
+  </main>
+
+  <!-- Add/Edit Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modal-title">✨ 新增提示詞</h2>
+        <button class="modal-close" id="modal-close">×</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label>
+            <span class="label-text">標題</span>
+            <span class="label-hint">為提示詞取個好記的名字</span>
+          </label>
+          <input type="text" id="prompt-title" placeholder="例如：夢幻森林精靈">
+        </div>
+
+        <div class="form-group">
+          <label>
+            <span class="label-text">提示詞內容</span>
+            <span class="char-count"><span id="prompt-char-count">0</span> 字</span>
+          </label>
+          <div class="prompt-editor">
+            <textarea id="prompt-content" placeholder="輸入你的提示詞..."></textarea>
+            <div class="editor-tools">
+              <button class="tool-btn" onclick="insertSnippet('high quality')" title="高品質">HQ</button>
+              <button class="tool-btn" onclick="insertSnippet('masterpiece')" title="傑作">🎨</button>
+              <button class="tool-btn" onclick="insertSnippet('detailed')" title="細節">📐</button>
+              <button class="tool-btn" onclick="insertSnippet('4k')" title="4K">4K</button>
+              <button class="tool-btn" onclick="insertSnippet('8k')" title="8K">8K</button>
+              <button class="tool-btn" onclick="insertSnippet('cinematic lighting')" title="電影光效">🎬</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>
+            <span class="label-text">分類</span>
+          </label>
+          <select id="prompt-category">
+            <option value="portrait">◉ 人像角色</option>
+            <option value="photo-edit">◈ 照片編輯</option>
+            <option value="style">❖ 風格轉換</option>
+            <option value="design">★ 創意設計</option>
+            <option value="product">▣ 產品攝影</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>
+            <span class="label-text">標籤</span>
+            <span class="label-hint">點擊下方快速新增</span>
+          </label>
+          <input type="text" id="prompt-tags" placeholder="用逗號分隔，或點擊下方建議標籤">
+          <div class="suggested-tags" id="suggested-tags">
+            <!-- Generated by JS based on category -->
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>
+            <span class="label-text">預覽圖片</span>
+            <span class="label-hint">最多 3 張</span>
+          </label>
+          <div class="image-upload" id="image-upload-area">
+            <input type="file" id="prompt-images" accept="image/*" multiple hidden>
+            <div class="upload-zone" id="upload-placeholder">
+              <div class="upload-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                  <polyline points="17,8 12,3 7,8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+              </div>
+              <span>拖曳圖片或點擊上傳</span>
+            </div>
+            <div class="image-previews" id="image-previews"></div>
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+        <div class="form-section-title">投稿資訊（選填）</div>
+
+        <div class="form-row">
+          <div class="form-group half">
+            <label>
+              <span class="label-text">作者名稱</span>
+            </label>
+            <input type="text" id="prompt-author" placeholder="你的名字或暱稱">
+          </div>
+          <div class="form-group half">
+            <label>
+              <span class="label-text">作者網站</span>
+            </label>
+            <input type="url" id="prompt-author-url" placeholder="https://...">
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-ghost" id="modal-cancel">取消</button>
+        <button class="btn-primary" id="modal-save">
+          💾 儲存
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="detail-overlay" id="detail-overlay">
+    <div class="detail-modal">
+      <button class="detail-close" id="detail-close">×</button>
+
+      <div class="detail-content">
+        <div class="detail-left">
+          <div class="detail-image" id="detail-image">
+            <div class="no-image">🍌</div>
+          </div>
+        </div>
+
+        <div class="detail-right">
+          <div class="detail-header">
+            <span class="detail-category" id="detail-category">分類</span>
+            <h2 id="detail-title">標題</h2>
+            <div class="detail-author" id="detail-author"></div>
+          </div>
+
+          <div class="detail-section">
+            <div class="section-header">
+              <h3>✨ 提示詞</h3>
+              <button class="copy-btn" id="copy-prompt-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" />
+                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+                </svg>
+                複製
+              </button>
+            </div>
+            <div class="prompt-display" id="detail-prompt"></div>
+          </div>
+
+
+          <div class="detail-tags" id="detail-tags"></div>
+
+          <div class="detail-actions">
+            <button class="action-btn favorite" id="detail-favorite">
+              <span class="heart">♡</span>
+              收藏
+            </button>
+            <button class="action-btn" id="detail-edit">
+              ✏️ 編輯
+            </button>
+            <button class="action-btn danger" id="detail-delete">
+              🗑️ 刪除
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <span class="toast-icon" id="toast-icon">✓</span>
+    <span class="toast-message" id="toast-message"></span>
+  </div>
+
+  <script src="nano-banana.js"></script>
+</body>
+
+</html>

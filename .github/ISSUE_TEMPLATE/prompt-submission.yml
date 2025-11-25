@@ -1,0 +1,71 @@
+name: 🍌 投稿提示詞
+description: 分享你的 Nano Banana 提示詞
+title: "[Prompt] "
+labels: ["pending"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感謝你投稿提示詞！請填寫以下資訊，審核通過後會顯示在網站上。
+
+  - type: input
+    id: title
+    attributes:
+      label: 提示詞名稱
+      description: 為這個提示詞取一個好記的名稱
+      placeholder: 例如：夢幻森林精靈
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: 分類
+      description: 選擇最適合的分類
+      options:
+        - 人像角色
+        - 照片編輯
+        - 風格轉換
+        - 創意設計
+        - 產品攝影
+    validations:
+      required: true
+
+  - type: textarea
+    id: prompt
+    attributes:
+      label: 提示詞內容
+      description: 完整的提示詞
+      placeholder: |
+        ethereal forest spirit, bioluminescent plants, magical atmosphere...
+    validations:
+      required: true
+
+  - type: input
+    id: tags
+    attributes:
+      label: 標籤
+      description: 用逗號分隔，方便搜尋
+      placeholder: 例如：奇幻, 精靈, 森林
+
+  - type: input
+    id: image
+    attributes:
+      label: 預覽圖片網址（選填）
+      description: 可以貼上用這個提示詞生成的圖片網址
+      placeholder: https://...
+
+  - type: input
+    id: author
+    attributes:
+      label: 作者名稱（選填）
+      description: 你的名字或暱稱
+      placeholder: 你的名字
+
+  - type: input
+    id: author_url
+    attributes:
+      label: 作者網站（選填）
+      description: 你的個人網站或社群連結
+      placeholder: https://...
+
