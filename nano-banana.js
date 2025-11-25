@@ -131,7 +131,7 @@ function parseIssueToPrompt(issue) {
     const prompt = getValue('提示詞內容');
     const categoryName = getValue('分類');
     const tagsStr = getValue('標籤');
-    const image = getValue('預覽圖片網址（選填）');
+    const imageContent = getValue('預覽圖片（選填）') || getValue('預覽圖片網址（選填）');
     const author = getValue('作者名稱（選填）');
     const authorUrl = getValue('作者網站（選填）');
 
@@ -139,7 +139,29 @@ function parseIssueToPrompt(issue) {
 
     const category = categoryMap[categoryName] || 'style';
     const tags = tagsStr ? tagsStr.split(',').map(t => t.trim()).filter(t => t) : [];
-    const images = image && image !== '_No response_' ? [image] : [];
+    
+    // Parse images from markdown format or direct URLs
+    let images = [];
+    if (imageContent && imageContent !== '_No response_') {
+      // Match markdown image syntax: ![...](url) or direct URLs
+      const markdownImageRegex = /!\[.*?\]\((https?:\/\/[^\s)]+)\)/g;
+      const directUrlRegex = /(https?:\/\/(?:user-images\.githubusercontent\.com|github\.com\/user-attachments)[^\s<>"')\]]+)/g;
+      
+      let match;
+      while ((match = markdownImageRegex.exec(imageContent)) !== null) {
+        images.push(match[1]);
+      }
+      // Also check for direct URLs (in case they paste just the URL)
+      while ((match = directUrlRegex.exec(imageContent)) !== null) {
+        if (!images.includes(match[1])) {
+          images.push(match[1]);
+        }
+      }
+      // Fallback: if no images found but content exists and looks like a URL
+      if (images.length === 0 && imageContent.startsWith('http')) {
+        images = [imageContent.trim()];
+      }
+    }
 
     return {
       id: issue.number,

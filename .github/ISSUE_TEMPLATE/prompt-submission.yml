@@ -48,12 +48,12 @@ body:
       description: 用逗號分隔，方便搜尋
       placeholder: 例如：奇幻, 精靈, 森林
 
-  - type: input
+  - type: textarea
     id: image
     attributes:
-      label: 預覽圖片網址（選填）
-      description: 可以貼上用這個提示詞生成的圖片網址
-      placeholder: https://...
+      label: 預覽圖片（選填）
+      description: 直接拖曳或貼上圖片到這裡！（支援多張圖片）
+      placeholder: 把圖片拖到這裡，GitHub 會自動上傳並產生連結
 
   - type: input
     id: author
