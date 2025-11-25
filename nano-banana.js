@@ -681,6 +681,8 @@ function openDetail(id) {
   // Images
   const imageContainer = document.getElementById('detail-image');
   const images = prompt.images || [];
+  // Store images for lightbox
+  window.currentDetailImages = images;
 
   if (images.length > 0) {
     if (images.length === 1) {
@@ -689,7 +691,10 @@ function openDetail(id) {
           <div class="spinner"></div>
           <span>${t('loadingImage')}</span>
         </div>
-        <img src="${getOptimizedUrl(images[0])}" alt="${prompt.title}" onload="onDetailImageLoad(this)" onerror="onDetailImageError(this)">
+        <img src="${getOptimizedUrl(images[0])}" alt="${prompt.title}" 
+             class="detail-clickable-image"
+             onclick="openLightbox(window.currentDetailImages, 0)"
+             onload="onDetailImageLoad(this)" onerror="onDetailImageError(this)">
       `;
     } else {
       imageContainer.innerHTML = `
@@ -699,11 +704,14 @@ function openDetail(id) {
               <div class="spinner"></div>
               <span>${t('loadingImage')}</span>
             </div>
-            <img src="${getOptimizedUrl(images[0])}" alt="${prompt.title}" id="main-preview-image" onload="onDetailImageLoad(this)" onerror="onDetailImageError(this)">
+            <img src="${getOptimizedUrl(images[0])}" alt="${prompt.title}" id="main-preview-image"
+                 class="detail-clickable-image"
+                 onclick="openLightboxAtCurrent()"
+                 onload="onDetailImageLoad(this)" onerror="onDetailImageError(this)">
           </div>
           <div class="detail-thumbnails">
             ${images.map((img, i) => `
-              <div class="detail-thumbnail ${i === 0 ? 'active' : ''}" onclick="switchDetailImage('${img}', this)">
+              <div class="detail-thumbnail ${i === 0 ? 'active' : ''}" onclick="switchDetailImage('${img}', this, ${i})">
                 <img src="${getThumbnailUrl(img, 100)}" alt="">
               </div>
             `).join('')}
@@ -725,7 +733,15 @@ function openDetail(id) {
   openModal('detail-overlay');
 }
 
-function switchDetailImage(src, element) {
+// Track current image index for multi-image view
+let currentDetailImageIndex = 0;
+
+function openLightboxAtCurrent() {
+  openLightbox(window.currentDetailImages, currentDetailImageIndex);
+}
+
+function switchDetailImage(src, element, index = 0) {
+  currentDetailImageIndex = index;
   const mainImage = document.getElementById('main-preview-image');
   const loader = document.querySelector('.detail-main-image .detail-image-loader');
 
@@ -857,3 +873,116 @@ function showToast(message, type = 'success') {
     toast.classList.remove('show');
   }, 3000);
 }
+
+// ==========================================
+// Lightbox
+// ==========================================
+let lightboxImages = [];
+let lightboxIndex = 0;
+
+function openLightbox(images, startIndex = 0) {
+  if (!images || images.length === 0) return;
+  
+  lightboxImages = images;
+  lightboxIndex = startIndex;
+  
+  const overlay = document.getElementById('lightbox-overlay');
+  const img = document.getElementById('lightbox-image');
+  const counter = document.getElementById('lightbox-counter');
+  const prevBtn = document.getElementById('lightbox-prev');
+  const nextBtn = document.getElementById('lightbox-next');
+  
+  // Use optimized URL for lightbox
+  img.src = getOptimizedUrl(lightboxImages[lightboxIndex], 1200);
+  
+  // Update counter
+  if (lightboxImages.length > 1) {
+    counter.textContent = `${lightboxIndex + 1} / ${lightboxImages.length}`;
+    counter.style.display = 'block';
+    prevBtn.style.display = 'flex';
+    nextBtn.style.display = 'flex';
+  } else {
+    counter.style.display = 'none';
+    prevBtn.style.display = 'none';
+    nextBtn.style.display = 'none';
+  }
+  
+  updateLightboxNav();
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  
+  trackEvent('open_lightbox', { image_count: lightboxImages.length });
+}
+
+function closeLightbox() {
+  const overlay = document.getElementById('lightbox-overlay');
+  overlay.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function lightboxPrev() {
+  if (lightboxIndex > 0) {
+    lightboxIndex--;
+    updateLightboxImage();
+  }
+}
+
+function lightboxNext() {
+  if (lightboxIndex < lightboxImages.length - 1) {
+    lightboxIndex++;
+    updateLightboxImage();
+  }
+}
+
+function updateLightboxImage() {
+  const img = document.getElementById('lightbox-image');
+  const counter = document.getElementById('lightbox-counter');
+  
+  img.style.opacity = '0';
+  setTimeout(() => {
+    img.src = getOptimizedUrl(lightboxImages[lightboxIndex], 1200);
+    img.onload = () => {
+      img.style.opacity = '1';
+    };
+  }, 150);
+  
+  counter.textContent = `${lightboxIndex + 1} / ${lightboxImages.length}`;
+  updateLightboxNav();
+}
+
+function updateLightboxNav() {
+  const prevBtn = document.getElementById('lightbox-prev');
+  const nextBtn = document.getElementById('lightbox-next');
+  
+  prevBtn.disabled = lightboxIndex === 0;
+  nextBtn.disabled = lightboxIndex === lightboxImages.length - 1;
+}
+
+// Initialize lightbox event listeners
+document.addEventListener('DOMContentLoaded', () => {
+  const overlay = document.getElementById('lightbox-overlay');
+  const closeBtn = document.getElementById('lightbox-close');
+  const prevBtn = document.getElementById('lightbox-prev');
+  const nextBtn = document.getElementById('lightbox-next');
+  
+  if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
+  if (prevBtn) prevBtn.addEventListener('click', lightboxPrev);
+  if (nextBtn) nextBtn.addEventListener('click', lightboxNext);
+  
+  if (overlay) {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        closeLightbox();
+      }
+    });
+  }
+  
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (!document.getElementById('lightbox-overlay')?.classList.contains('active')) return;
+    
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') lightboxPrev();
+    if (e.key === 'ArrowRight') lightboxNext();
+  });
+});

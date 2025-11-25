@@ -15,7 +15,7 @@
     gtag('config', 'G-ZRF9T23LVK');
   </script>
 
-  <link rel="stylesheet" href="nano-banana.css?v=1.0.5">
+  <link rel="stylesheet" href="nano-banana.css?v=1.0.6">
   <link
     href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap"
     rel="stylesheet">
@@ -345,7 +345,18 @@
     <span class="toast-message" id="toast-message"></span>
   </div>
 
-  <script src="nano-banana.js?v=1.2.0"></script>
+  <!-- Lightbox -->
+  <div class="lightbox-overlay" id="lightbox-overlay">
+    <button class="lightbox-close" id="lightbox-close">×</button>
+    <button class="lightbox-nav lightbox-prev" id="lightbox-prev">‹</button>
+    <button class="lightbox-nav lightbox-next" id="lightbox-next">›</button>
+    <div class="lightbox-content">
+      <img src="" alt="" id="lightbox-image">
+    </div>
+    <div class="lightbox-counter" id="lightbox-counter"></div>
+  </div>
+
+  <script src="nano-banana.js?v=1.2.1"></script>
 </body>
 
 </html>
