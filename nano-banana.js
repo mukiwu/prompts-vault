@@ -100,10 +100,12 @@ async function loadPromptsFromGitHub() {
     const issues = await response.json();
     prompts = issues.map(parseIssueToPrompt).filter(p => p !== null);
 
+    isLoading = false;
     renderPrompts();
     updateStats();
   } catch (error) {
     console.error('Failed to load prompts:', error);
+    isLoading = false;
     container.innerHTML = `
       <div class="error-state">
         <span class="error-icon">⚠️</span>
@@ -111,8 +113,6 @@ async function loadPromptsFromGitHub() {
         <button class="retry-btn" onclick="loadPromptsFromGitHub()">重新載入</button>
       </div>
     `;
-  } finally {
-    isLoading = false;
   }
 }
 
