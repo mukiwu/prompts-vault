@@ -1,0 +1,88 @@
+[debug] [2025-11-25T07:59:45.240Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T07:59:45.244Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T07:59:45.244Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-11-25T07:59:45.244Z] > authorizing via signed-in user (mukispace@gmail.com)
+[debug] [2025-11-25T07:59:45.245Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T07:59:45.245Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T07:59:45.251Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-11-25T07:59:45.251Z] > authorizing via signed-in user (mukispace@gmail.com)
+[debug] [2025-11-25T07:59:45.251Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T07:59:45.308Z] Checked if tokens are valid: false, expires at: 1760065505012
+[debug] [2025-11-25T07:59:45.308Z] Checked if tokens are valid: false, expires at: 1760065505012
+[debug] [2025-11-25T07:59:45.308Z] > refreshing access token with scopes: []
+[debug] [2025-11-25T07:59:45.309Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-11-25T07:59:45.309Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-11-25T07:59:45.311Z] Checked if tokens are valid: false, expires at: 1760065505012
+[debug] [2025-11-25T07:59:45.311Z] Checked if tokens are valid: false, expires at: 1760065505012
+[debug] [2025-11-25T07:59:45.311Z] > refreshing access token with scopes: []
+[debug] [2025-11-25T07:59:45.311Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-11-25T07:59:45.311Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-11-25T07:59:45.373Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-11-25T07:59:45.373Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-11-25T07:59:45.417Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects//services/firebaseappdistribution.googleapis.com [none]
+[debug] [2025-11-25T07:59:45.417Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects//services/firebaseappdistribution.googleapis.com x-goog-quota-user=projects/
+[debug] [2025-11-25T07:59:45.418Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-11-25T07:59:45.418Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-11-25T07:59:45.447Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/xenon-respect-467410-e0/services/firebaseappdistribution.googleapis.com [none]
+[debug] [2025-11-25T07:59:45.447Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/xenon-respect-467410-e0/services/firebaseappdistribution.googleapis.com x-goog-quota-user=projects/xenon-respect-467410-e0
+[debug] [2025-11-25T07:59:45.672Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects//services/firebaseappdistribution.googleapis.com 400
+[debug] [2025-11-25T07:59:45.672Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects//services/firebaseappdistribution.googleapis.com [omitted]
+[debug] [2025-11-25T07:59:45.673Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T07:59:45.691Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T07:59:45.691Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T07:59:45.691Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-11-25T07:59:45.691Z] > authorizing via signed-in user (mukispace@gmail.com)
+[debug] [2025-11-25T07:59:45.691Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T07:59:45.692Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T07:59:45.692Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-11-25T07:59:45.692Z] > authorizing via signed-in user (mukispace@gmail.com)
+[debug] [2025-11-25T07:59:45.693Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T07:59:45.713Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T07:59:45.714Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T07:59:45.714Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-11-25T07:59:45.714Z] > authorizing via signed-in user (mukispace@gmail.com)
+[debug] [2025-11-25T07:59:45.714Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T07:59:45.714Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T07:59:45.714Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-11-25T07:59:45.714Z] > authorizing via signed-in user (mukispace@gmail.com)
+[debug] [2025-11-25T07:59:46.686Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/xenon-respect-467410-e0/services/firebaseappdistribution.googleapis.com 403
+[debug] [2025-11-25T07:59:46.686Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/xenon-respect-467410-e0/services/firebaseappdistribution.googleapis.com [omitted]
+[debug] [2025-11-25T08:02:36.259Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T08:02:36.262Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T08:02:36.262Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-11-25T08:02:36.262Z] > authorizing via signed-in user (mukispace@gmail.com)
+[debug] [2025-11-25T08:02:36.262Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T08:02:36.263Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T08:02:36.268Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-11-25T08:02:36.268Z] > authorizing via signed-in user (mukispace@gmail.com)
+[debug] [2025-11-25T08:02:36.268Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T08:02:36.326Z] Checked if tokens are valid: true, expires at: 1764061184418
+[debug] [2025-11-25T08:02:36.326Z] Checked if tokens are valid: true, expires at: 1764061184418
+[debug] [2025-11-25T08:02:36.326Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects//services/firebaseappdistribution.googleapis.com [none]
+[debug] [2025-11-25T08:02:36.326Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects//services/firebaseappdistribution.googleapis.com x-goog-quota-user=projects/
+[debug] [2025-11-25T08:02:36.327Z] Checked if tokens are valid: true, expires at: 1764061184418
+[debug] [2025-11-25T08:02:36.328Z] Checked if tokens are valid: true, expires at: 1764061184418
+[debug] [2025-11-25T08:02:36.328Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/xenon-respect-467410-e0/services/firebaseappdistribution.googleapis.com [none]
+[debug] [2025-11-25T08:02:36.328Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/xenon-respect-467410-e0/services/firebaseappdistribution.googleapis.com x-goog-quota-user=projects/xenon-respect-467410-e0
+[debug] [2025-11-25T08:02:37.366Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects//services/firebaseappdistribution.googleapis.com 400
+[debug] [2025-11-25T08:02:37.366Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects//services/firebaseappdistribution.googleapis.com [omitted]
+[debug] [2025-11-25T08:02:37.366Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T08:02:37.408Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T08:02:37.409Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T08:02:37.409Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-11-25T08:02:37.409Z] > authorizing via signed-in user (mukispace@gmail.com)
+[debug] [2025-11-25T08:02:37.409Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T08:02:37.409Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T08:02:37.410Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-11-25T08:02:37.410Z] > authorizing via signed-in user (mukispace@gmail.com)
+[debug] [2025-11-25T08:02:37.410Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T08:02:37.422Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T08:02:37.423Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T08:02:37.423Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-11-25T08:02:37.423Z] > authorizing via signed-in user (mukispace@gmail.com)
+[debug] [2025-11-25T08:02:37.423Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T08:02:37.423Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"firebase_update_environment"}
+[debug] [2025-11-25T08:02:37.423Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-11-25T08:02:37.423Z] > authorizing via signed-in user (mukispace@gmail.com)
+[debug] [2025-11-25T08:02:37.570Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/xenon-respect-467410-e0/services/firebaseappdistribution.googleapis.com 403
+[debug] [2025-11-25T08:02:37.570Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/xenon-respect-467410-e0/services/firebaseappdistribution.googleapis.com [omitted]

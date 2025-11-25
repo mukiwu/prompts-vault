@@ -646,10 +646,10 @@ function openDetail(id) {
   if (!prompt) return;
 
   currentPromptId = id;
-  trackEvent('view_prompt', { 
-    prompt_id: id, 
+  trackEvent('view_prompt', {
+    prompt_id: id,
     prompt_title: prompt.title,
-    category: prompt.category 
+    category: prompt.category
   });
 
   document.getElementById('detail-title').textContent = prompt.title;
@@ -759,7 +759,7 @@ function switchDetailImage(src, element) {
 function openCurrentIssue() {
   const prompt = prompts.find(p => p.id === currentPromptId);
   if (prompt && prompt.issueUrl) {
-    trackEvent('like_prompt', { 
+    trackEvent('like_prompt', {
       prompt_id: currentPromptId,
       prompt_title: prompt.title
     });
@@ -823,7 +823,7 @@ function escapeHtml(text) {
 
 function copyToClipboard(text) {
   const prompt = prompts.find(p => p.id === currentPromptId);
-  trackEvent('copy_prompt', { 
+  trackEvent('copy_prompt', {
     prompt_id: currentPromptId,
     prompt_title: prompt?.title || 'unknown'
   });
