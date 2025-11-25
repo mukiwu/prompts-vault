@@ -31,8 +31,8 @@ const i18n = {
     product: '產品攝影',
     // Stats
     prompts: '提示詞',
-    favorites: '收藏',
-    copies: '複製次數',
+    favorites: '讚',
+    copies: '分類',
     // Card & Detail
     copy: '複製',
     copied: '已複製到剪貼簿 📋',
@@ -69,8 +69,8 @@ const i18n = {
     product: 'Product',
     // Stats
     prompts: 'Prompts',
-    favorites: 'Favorites',
-    copies: 'Copies',
+    favorites: 'Likes',
+    copies: 'Categories',
     // Card & Detail
     copy: 'Copy',
     copied: 'Copied to clipboard 📋',
@@ -521,6 +521,7 @@ function renderPromptCard(prompt) {
       : `<span class="card-placeholder">🍌</span>`
     }
         ${imageCount > 1 ? `<span class="card-image-count">+${imageCount - 1}</span>` : ''}
+        ${prompt.reactions > 0 ? `<span class="card-reactions">👍 ${prompt.reactions}</span>` : ''}
       </div>
       <div class="card-body">
         <h3 class="card-title">${escapeHtml(prompt.title)}</h3>
@@ -578,14 +579,17 @@ function onDetailImageError(img) {
 
 function updateStats() {
   const totalPromptsEl = document.getElementById('total-prompts');
-  const totalFavoritesEl = document.getElementById('total-favorites');
-  const totalCopiesEl = document.getElementById('total-copies');
+  const totalReactionsEl = document.getElementById('total-favorites');
+  const totalCategoriesEl = document.getElementById('total-copies');
 
   if (totalPromptsEl) totalPromptsEl.textContent = prompts.length;
-  if (totalFavoritesEl) totalFavoritesEl.textContent = Object.keys(categoryNames).length;
-
+  
+  // Total reactions (likes) across all prompts
   const totalReactions = prompts.reduce((sum, p) => sum + (p.reactions || 0), 0);
-  if (totalCopiesEl) totalCopiesEl.textContent = totalReactions;
+  if (totalReactionsEl) totalReactionsEl.textContent = totalReactions;
+  
+  // Total categories
+  if (totalCategoriesEl) totalCategoriesEl.textContent = Object.keys(categoryNames).length;
 }
 
 // ==========================================
@@ -671,10 +675,12 @@ function openDetail(id) {
     imageContainer.innerHTML = `<div class="no-image">🍌</div>`;
   }
 
-  // Change favorite button to "View on GitHub"
+  // Change favorite button to show reactions and link to GitHub
   const favBtn = document.getElementById('detail-favorite');
-  favBtn.innerHTML = `<span class="heart">↗</span> ${t('viewOnGitHub')}`;
-  favBtn.title = currentLang === 'zh-TW' ? '在 GitHub 上查看' : 'View on GitHub';
+  const reactionCount = prompt.reactions || 0;
+  const likeText = currentLang === 'zh-TW' ? '讚' : 'Like';
+  favBtn.innerHTML = `<span class="heart">👍</span> ${likeText} ${reactionCount > 0 ? `(${reactionCount})` : ''}`;
+  favBtn.title = currentLang === 'zh-TW' ? '在 GitHub 上按讚' : 'Like on GitHub';
 
   openModal('detail-overlay');
 }

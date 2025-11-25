@@ -553,6 +553,17 @@ body {
     color: var(--text-primary);
 }
 
+.card-reactions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 4px 8px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 4px;
+    font-size: 11px;
+    color: var(--banana-yellow);
+}
+
 .card-body {
     padding: 16px;
 }
