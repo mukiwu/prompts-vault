@@ -680,9 +680,34 @@ function openDetail(id) {
 }
 
 function switchDetailImage(src, element) {
-  document.getElementById('main-preview-image').src = getOptimizedUrl(src);
+  const mainImage = document.getElementById('main-preview-image');
+  const loader = document.querySelector('.detail-main-image .detail-image-loader');
+  
+  // Show loading state
+  mainImage.classList.remove('loaded');
+  if (loader) {
+    loader.style.display = 'flex';
+  }
+  
+  // Update active thumbnail
   document.querySelectorAll('.detail-thumbnail').forEach(t => t.classList.remove('active'));
   element.classList.add('active');
+  
+  // Load new image
+  const newSrc = getOptimizedUrl(src);
+  mainImage.onload = function() {
+    mainImage.classList.add('loaded');
+    if (loader) {
+      loader.style.display = 'none';
+    }
+  };
+  mainImage.onerror = function() {
+    if (loader) {
+      loader.innerHTML = '<span class="card-placeholder">🍌</span>';
+    }
+    mainImage.style.display = 'none';
+  };
+  mainImage.src = newSrc;
 }
 
 function openCurrentIssue() {
