@@ -36,7 +36,7 @@ const i18n = {
     // Card & Detail
     copy: '複製',
     copied: '已複製到剪貼簿 📋',
-    author: '投稿者：',
+    author: '來源：',
     promptLabel: '✨ 提示詞',
     viewOnGitHub: 'GitHub',
     edit: '✏️ 編輯',
@@ -617,7 +617,7 @@ function openDetail(id) {
   // Author info
   const authorContainer = document.getElementById('detail-author');
   if (prompt.author) {
-    let authorHtml = `<span class="author-label">投稿者：</span>`;
+    let authorHtml = `<span class="author-label">${t('author')}</span>`;
     if (prompt.authorUrl) {
       authorHtml += `<a href="${prompt.authorUrl}" target="_blank" rel="noopener noreferrer" class="author-link">${escapeHtml(prompt.author)}</a>`;
     } else {
