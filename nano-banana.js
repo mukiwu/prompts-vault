@@ -302,7 +302,7 @@ function renderPromptCard(prompt) {
 
 function updateStats() {
   document.getElementById('total-prompts').textContent = prompts.length;
-  document.getElementById('total-categories').textContent = Object.keys(categoryNames).length;
+  document.getElementById('total-favorites').textContent = Object.keys(categoryNames).length;
 
   const totalReactions = prompts.reduce((sum, p) => sum + (p.reactions || 0), 0);
   document.getElementById('total-copies').textContent = totalReactions;

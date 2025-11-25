@@ -76,12 +76,12 @@ git push -u origin main
 
 ---
 
-### ⏳ 等待完成
+### ✅ 已完成
 
-- [ ] 推送到 GitHub（執行 Step 2）
-- [ ] 啟用 GitHub Pages（執行 Step 3）
-- [ ] 建立 Labels（執行 Step 4）
-- [ ] 建立第一個測試 Issue（執行 Step 5）
+- [x] 推送到 GitHub
+- [x] 啟用 GitHub Pages（網址：https://mukiwu.github.io/prompts-vault/）
+- [x] 建立 Labels（`approved` + `pending`）
+- [ ] 建立第一個測試 Issue（可選）
 
 ### 優先級：中
 
