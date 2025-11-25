@@ -324,11 +324,13 @@ function parseIssueToPrompt(issue) {
 
     // Parse the Issue body (from GitHub Issue Form)
     const getValue = (label) => {
-      const regex = new RegExp(`### ${label}\\s*\\n\\s*([\\s\\S]*?)(?=\\n###|$)`, 'i');
+      const regex = new RegExp(`### ${label}\\s*\\n([\\s\\S]*?)(?=\\n*###|$)`, 'i');
       const match = body.match(regex);
       if (!match) return '';
       // Clean up the value - remove empty lines and trim
-      const value = match[1].trim();
+      let value = match[1].trim();
+      // Remove any ### headers that might have been captured
+      value = value.replace(/^###.*$/gm, '').trim();
       // Return empty if value is just whitespace or newlines
       if (!value || /^\s*$/.test(value)) return '';
       return value;
