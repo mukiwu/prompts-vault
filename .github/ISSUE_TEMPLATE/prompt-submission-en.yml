@@ -52,7 +52,9 @@ body:
     id: image
     attributes:
       label: Preview Image (Optional)
-      description: Drag and drop images here! (Supports multiple images)
+      description: |
+        Drag and drop images here! (Supports multiple images)
+        ⚠️ Recommended: Image width 800-1200px, file size < 500KB for faster loading
       placeholder: Drag images here, GitHub will auto-upload and generate links
 
   - type: input

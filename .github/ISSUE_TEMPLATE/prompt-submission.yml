@@ -52,7 +52,9 @@ body:
     id: image
     attributes:
       label: 預覽圖片（選填）
-      description: 直接拖曳或貼上圖片到這裡！（支援多張圖片）
+      description: |
+        直接拖曳或貼上圖片到這裡！（支援多張圖片）
+        ⚠️ 建議：圖片寬度 800-1200px，檔案大小 < 500KB，以加快載入速度
       placeholder: 把圖片拖到這裡，GitHub 會自動上傳並產生連結
 
   - type: input

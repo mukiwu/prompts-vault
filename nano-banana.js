@@ -218,6 +218,23 @@ const categoryIcons = {
   'product': '▣'
 };
 
+// ==========================================
+// Image Proxy for thumbnails (resize & optimize)
+// ==========================================
+// Use wsrv.nl free image proxy service for thumbnails
+// This reduces load time significantly for large images
+function getThumbnailUrl(originalUrl, width = 400) {
+  if (!originalUrl) return '';
+  // wsrv.nl is a free image CDN that supports resize
+  // Parameters: w=width, q=quality, we=webp-auto
+  return `https://wsrv.nl/?url=${encodeURIComponent(originalUrl)}&w=${width}&q=80&we`;
+}
+
+function getOptimizedUrl(originalUrl, width = 800) {
+  if (!originalUrl) return '';
+  return `https://wsrv.nl/?url=${encodeURIComponent(originalUrl)}&w=${width}&q=85&we`;
+}
+
 const categoryMap = {
   // Chinese
   '人像角色': 'portrait',
@@ -500,7 +517,7 @@ function renderPromptCard(prompt) {
            <div class="spinner"></div>
            <span class="loader-text">${t('loading').replace('...', '')}</span>
          </div>
-         <img src="${prompt.images[0]}" alt="${prompt.title}" loading="lazy" onload="onImageLoad(this, ${prompt.id})" onerror="onImageError(this, ${prompt.id})">`
+         <img src="${getThumbnailUrl(prompt.images[0])}" alt="${prompt.title}" loading="lazy" onload="onImageLoad(this, ${prompt.id})" onerror="onImageError(this, ${prompt.id})">`
       : `<span class="card-placeholder">🍌</span>`
     }
         ${imageCount > 1 ? `<span class="card-image-count">+${imageCount - 1}</span>` : ''}
@@ -628,7 +645,7 @@ function openDetail(id) {
           <div class="spinner"></div>
           <span>${t('loadingImage')}</span>
         </div>
-        <img src="${images[0]}" alt="${prompt.title}" onload="onDetailImageLoad(this)" onerror="onDetailImageError(this)">
+        <img src="${getOptimizedUrl(images[0])}" alt="${prompt.title}" onload="onDetailImageLoad(this)" onerror="onDetailImageError(this)">
       `;
     } else {
       imageContainer.innerHTML = `
@@ -638,12 +655,12 @@ function openDetail(id) {
               <div class="spinner"></div>
               <span>${t('loadingImage')}</span>
             </div>
-            <img src="${images[0]}" alt="${prompt.title}" id="main-preview-image" onload="onDetailImageLoad(this)" onerror="onDetailImageError(this)">
+            <img src="${getOptimizedUrl(images[0])}" alt="${prompt.title}" id="main-preview-image" onload="onDetailImageLoad(this)" onerror="onDetailImageError(this)">
           </div>
           <div class="detail-thumbnails">
             ${images.map((img, i) => `
               <div class="detail-thumbnail ${i === 0 ? 'active' : ''}" onclick="switchDetailImage('${img}', this)">
-                <img src="${img}" alt="">
+                <img src="${getThumbnailUrl(img, 100)}" alt="">
               </div>
             `).join('')}
           </div>
@@ -663,7 +680,7 @@ function openDetail(id) {
 }
 
 function switchDetailImage(src, element) {
-  document.getElementById('main-preview-image').src = src;
+  document.getElementById('main-preview-image').src = getOptimizedUrl(src);
   document.querySelectorAll('.detail-thumbnail').forEach(t => t.classList.remove('active'));
   element.classList.add('active');
 }
