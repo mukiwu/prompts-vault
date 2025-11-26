@@ -832,6 +832,12 @@ function renderMarkdown(text) {
   return html;
 }
 
+// Toggle comments section
+function toggleComments() {
+  const section = document.getElementById('detail-comments');
+  section.classList.toggle('collapsed');
+}
+
 // Load comments for an issue
 async function loadComments(issueId) {
   const commentsList = document.getElementById('comments-list');

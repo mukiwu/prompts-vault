@@ -1957,12 +1957,13 @@ body {
 
 /* Detail Modal Ad */
 .ad-detail {
-    margin-top: 24px;
+    margin-top: 1rem;
     padding: 0;
 }
 
 .ad-detail .ad-placeholder {
-    min-height: 100px;
+    min-height: auto;
+    padding: 0.6rem 1rem;
 }
 
 /* In-feed Ad (between cards) */
@@ -2000,16 +2001,49 @@ body {
    ========================================== */
 
 .detail-comments {
-    margin-top: 1.5rem;
+    margin-top: 1rem;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 1.5rem;
+    padding-top: 1rem;
 }
 
 .comments-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    margin: -0.5rem;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+}
+
+.comments-header:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.comments-header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.comments-toggle {
+    display: flex;
+    align-items: center;
+    color: var(--text-muted);
+    transition: transform 0.3s ease;
+}
+
+.detail-comments.collapsed .comments-toggle {
+    transform: rotate(-90deg);
+}
+
+.detail-comments.collapsed .comments-list {
+    display: none;
+}
+
+.detail-comments:not(.collapsed) .comments-list {
+    margin-top: 1rem;
 }
 
 .comments-header h3 {
