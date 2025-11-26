@@ -67,7 +67,7 @@ const i18n = {
     topBanner: '💬 有任何建議或想法？歡迎聯繫 MUKI',
     bottomBanner: '🍌 喜歡這個網站嗎？追蹤 MUKI 獲取更多資訊',
     // Comments
-    comments: '💬 留言',
+    comments: '留言',
     reply: '回應',
     loadingComments: '載入留言中...',
     noComments: '還沒有留言，來當第一個吧！',
@@ -114,7 +114,7 @@ const i18n = {
     topBanner: '💬 Have suggestions or ideas? Contact MUKI',
     bottomBanner: '🍌 Like this site? Follow MUKI for more',
     // Comments
-    comments: '💬 Comments',
+    comments: 'Comments',
     reply: 'Reply',
     loadingComments: 'Loading comments...',
     noComments: 'No comments yet. Be the first!',
@@ -772,7 +772,6 @@ function openDetail(id) {
 
   // Update comments section UI text
   document.getElementById('comments-title').textContent = t('comments');
-  document.getElementById('reply-btn-text').textContent = t('reply');
   
   // Reset comments list with loading state
   const commentsList = document.getElementById('comments-list');
@@ -782,11 +781,6 @@ function openDetail(id) {
       <span>${t('loadingComments')}</span>
     </div>
   `;
-
-  // Set reply button link
-  const replyBtn = document.getElementById('reply-github-btn');
-  const { owner, repo } = GITHUB_CONFIG;
-  replyBtn.href = `https://github.com/${owner}/${repo}/issues/${id}#issuecomment-new`;
 
   // Load comments
   loadComments(id);
