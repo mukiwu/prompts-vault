@@ -66,6 +66,11 @@ const i18n = {
     sharePrompt: '✨ 歡迎分享你的提示詞',
     topBanner: '💬 有任何建議或想法？歡迎聯繫 MUKI',
     bottomBanner: '🍌 喜歡這個網站嗎？追蹤 MUKI 獲取更多資訊',
+    // Comments
+    comments: '💬 留言',
+    reply: '回應',
+    loadingComments: '載入留言中...',
+    noComments: '還沒有留言，來當第一個吧！',
     // Issue template
     issueTemplate: 'prompt-submission.yml'
   },
@@ -108,6 +113,11 @@ const i18n = {
     sharePrompt: '✨ Share your prompt',
     topBanner: '💬 Have suggestions or ideas? Contact MUKI',
     bottomBanner: '🍌 Like this site? Follow MUKI for more',
+    // Comments
+    comments: '💬 Comments',
+    reply: 'Reply',
+    loadingComments: 'Loading comments...',
+    noComments: 'No comments yet. Be the first!',
     // Issue template
     issueTemplate: 'prompt-submission-en.yml'
   }
@@ -756,11 +766,154 @@ function openDetail(id) {
   favBtn.innerHTML = `<span class="heart">👍</span> ${likeText} ${reactionCount > 0 ? `(${reactionCount})` : ''}`;
   favBtn.title = currentLang === 'zh-TW' ? '在 GitHub 上按讚' : 'Like on GitHub';
 
+  // Update comments section UI text
+  document.getElementById('comments-title').textContent = t('comments');
+  document.getElementById('reply-btn-text').textContent = t('reply');
+  document.getElementById('comments-loading').innerHTML = `
+    <div class="spinner"></div>
+    <span>${t('loadingComments')}</span>
+  `;
+
+  // Set reply button link
+  const replyBtn = document.getElementById('reply-github-btn');
+  replyBtn.href = `https://github.com/${REPO_OWNER}/${REPO_NAME}/issues/${id}#issuecomment-new`;
+
+  // Load comments
+  loadComments(id);
+
   openModal('detail-overlay');
 }
 
 // Track current image index for multi-image view
 let currentDetailImageIndex = 0;
+
+// ==========================================
+// Comments
+// ==========================================
+
+// Simple Markdown renderer
+function renderMarkdown(text) {
+  if (!text) return '';
+  
+  let html = escapeHtml(text);
+  
+  // Code blocks (```)
+  html = html.replace(/```(\w*)\n?([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+  
+  // Inline code (`)
+  html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+  
+  // Bold (**text** or __text__)
+  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/__([^_]+)__/g, '<strong>$1</strong>');
+  
+  // Italic (*text* or _text_)
+  html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+  html = html.replace(/_([^_]+)_/g, '<em>$1</em>');
+  
+  // Strikethrough (~~text~~)
+  html = html.replace(/~~([^~]+)~~/g, '<del>$1</del>');
+  
+  // Links [text](url)
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+  
+  // Images ![alt](url) - render as links to avoid loading issues
+  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">🖼️ $1</a>');
+  
+  // Line breaks
+  html = html.replace(/\n/g, '<br>');
+  
+  return html;
+}
+
+// Load comments for an issue
+async function loadComments(issueId) {
+  const commentsList = document.getElementById('comments-list');
+  const loadingEl = document.getElementById('comments-loading');
+  
+  // Show loading
+  loadingEl.style.display = 'flex';
+  commentsList.innerHTML = '';
+  commentsList.appendChild(loadingEl);
+  
+  try {
+    const response = await fetch(
+      `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/issues/${issueId}/comments`,
+      {
+        headers: {
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      }
+    );
+    
+    if (!response.ok) {
+      throw new Error('Failed to load comments');
+    }
+    
+    const comments = await response.json();
+    loadingEl.style.display = 'none';
+    
+    if (comments.length === 0) {
+      commentsList.innerHTML = `
+        <div class="no-comments">
+          <span>💬</span>
+          <p>${t('noComments')}</p>
+        </div>
+      `;
+      return;
+    }
+    
+    commentsList.innerHTML = comments.map(comment => `
+      <div class="comment">
+        <div class="comment-header">
+          <a href="${comment.user.html_url}" target="_blank" rel="noopener noreferrer" class="comment-author">
+            <img src="${comment.user.avatar_url}" alt="${comment.user.login}" class="comment-avatar">
+            <span class="comment-name">${escapeHtml(comment.user.login)}</span>
+          </a>
+          <span class="comment-date">${formatDate(comment.created_at)}</span>
+        </div>
+        <div class="comment-body">
+          ${renderMarkdown(comment.body)}
+        </div>
+      </div>
+    `).join('');
+    
+  } catch (error) {
+    console.error('Error loading comments:', error);
+    loadingEl.style.display = 'none';
+    commentsList.innerHTML = `
+      <div class="no-comments">
+        <span>⚠️</span>
+        <p>${currentLang === 'zh-TW' ? '無法載入留言' : 'Failed to load comments'}</p>
+      </div>
+    `;
+  }
+}
+
+// Format date for comments
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffMs = now - date;
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  
+  if (diffDays === 0) {
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    if (diffHours === 0) {
+      const diffMins = Math.floor(diffMs / (1000 * 60));
+      return currentLang === 'zh-TW' ? `${diffMins} 分鐘前` : `${diffMins}m ago`;
+    }
+    return currentLang === 'zh-TW' ? `${diffHours} 小時前` : `${diffHours}h ago`;
+  } else if (diffDays < 7) {
+    return currentLang === 'zh-TW' ? `${diffDays} 天前` : `${diffDays}d ago`;
+  } else {
+    return date.toLocaleDateString(currentLang === 'zh-TW' ? 'zh-TW' : 'en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  }
+}
 
 function openLightboxAtCurrent() {
   openLightbox(window.currentDetailImages, currentDetailImageIndex);
