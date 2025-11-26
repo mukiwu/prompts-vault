@@ -532,6 +532,7 @@ function initEventListeners() {
   document.getElementById('copy-prompt-btn').addEventListener('click', copyCurrentPrompt);
   document.getElementById('detail-favorite').addEventListener('click', openCurrentIssue);
   document.getElementById('detail-edit').addEventListener('click', editCurrentIssue);
+  document.getElementById('detail-reply').addEventListener('click', replyCurrentIssue);
   document.getElementById('detail-delete').addEventListener('click', deleteCurrentIssue);
 }
 
@@ -766,6 +767,9 @@ function openDetail(id) {
   favBtn.innerHTML = `<span class="heart">👍</span> ${likeText} ${reactionCount > 0 ? `(${reactionCount})` : ''}`;
   favBtn.title = currentLang === 'zh-TW' ? '在 GitHub 上按讚' : 'Like on GitHub';
 
+  // Update reply button text
+  document.getElementById('detail-reply-text').textContent = t('reply');
+
   // Update comments section UI text
   document.getElementById('comments-title').textContent = t('comments');
   document.getElementById('reply-btn-text').textContent = t('reply');
@@ -972,6 +976,15 @@ function editCurrentIssue() {
   if (prompt && prompt.issueUrl) {
     // GitHub Issue edit URL format
     window.open(prompt.issueUrl, '_blank');
+  }
+}
+
+function replyCurrentIssue() {
+  if (currentPromptId) {
+    const { owner, repo } = GITHUB_CONFIG;
+    const url = `https://github.com/${owner}/${repo}/issues/${currentPromptId}#issuecomment-new`;
+    window.open(url, '_blank');
+    trackEvent('reply_prompt', { prompt_id: currentPromptId });
   }
 }
 
