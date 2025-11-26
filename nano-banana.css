@@ -1997,6 +1997,114 @@ body {
 }
 
 /* ==========================================
+   Pagination
+   ========================================== */
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem 1rem;
+    flex-wrap: wrap;
+}
+
+.page-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.page-btn:hover:not(:disabled) {
+    background: var(--bg-secondary);
+    border-color: var(--banana-yellow);
+    color: var(--banana-yellow);
+}
+
+.page-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.page-numbers {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.page-num {
+    min-width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.page-num:hover {
+    background: var(--bg-secondary);
+    border-color: var(--border-subtle);
+}
+
+.page-num.active {
+    background: var(--banana-yellow);
+    color: var(--bg-primary);
+    font-weight: 600;
+}
+
+.page-dots {
+    color: var(--text-muted);
+    padding: 0 0.3rem;
+}
+
+.page-info {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+    .pagination {
+        gap: 0.5rem;
+        padding: 1.5rem 0.5rem;
+    }
+    
+    .page-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+    }
+    
+    .page-btn span {
+        display: none;
+    }
+    
+    .page-num {
+        min-width: 32px;
+        height: 32px;
+        font-size: 0.85rem;
+    }
+    
+    .page-info {
+        width: 100%;
+        text-align: center;
+        order: -1;
+    }
+}
+
+/* ==========================================
    Comments Section
    ========================================== */
 

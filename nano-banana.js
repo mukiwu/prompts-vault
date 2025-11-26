@@ -231,6 +231,8 @@ let searchQuery = '';
 let currentPromptId = null;
 let currentView = 'grid';
 let isLoading = false;
+let currentPage = 1;
+const ITEMS_PER_PAGE = 24;
 
 // ==========================================
 // Category Mapping (supports both languages)
@@ -447,6 +449,7 @@ function initEventListeners() {
       document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
       pill.classList.add('active');
       currentFilter = pill.dataset.category;
+      currentPage = 1; // Reset to first page
       trackEvent('filter_category', { category: currentFilter });
       renderPrompts();
     });
@@ -468,6 +471,7 @@ function initEventListeners() {
   let searchTimeout;
   searchInput.addEventListener('input', (e) => {
     searchQuery = e.target.value.toLowerCase();
+    currentPage = 1; // Reset to first page
     renderPrompts();
     // Debounced search tracking
     clearTimeout(searchTimeout);
@@ -562,11 +566,25 @@ function renderPrompts() {
   if (filtered.length === 0) {
     container.innerHTML = '';
     emptyState.style.display = 'block';
+    hidePagination();
     return;
   }
 
   emptyState.style.display = 'none';
-  container.innerHTML = filtered.map(renderPromptCard).join('');
+  
+  // Pagination
+  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+  if (currentPage > totalPages) currentPage = totalPages;
+  if (currentPage < 1) currentPage = 1;
+  
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedPrompts = filtered.slice(startIndex, endIndex);
+  
+  container.innerHTML = paginatedPrompts.map(renderPromptCard).join('');
+  
+  // Render pagination
+  renderPagination(currentPage, totalPages, filtered.length);
 }
 
 function renderPromptCard(prompt) {
@@ -605,6 +623,87 @@ function renderPromptCard(prompt) {
       </div>
     </div>
   `;
+}
+
+// ==========================================
+// Pagination
+// ==========================================
+
+function renderPagination(current, total, totalItems) {
+  const container = document.getElementById('pagination');
+  if (!container) return;
+  
+  if (total <= 1) {
+    container.style.display = 'none';
+    return;
+  }
+  
+  container.style.display = 'flex';
+  
+  const prevDisabled = current <= 1;
+  const nextDisabled = current >= total;
+  
+  // Generate page numbers
+  let pageNumbers = [];
+  const maxVisible = 5;
+  
+  if (total <= maxVisible) {
+    for (let i = 1; i <= total; i++) pageNumbers.push(i);
+  } else {
+    if (current <= 3) {
+      pageNumbers = [1, 2, 3, 4, '...', total];
+    } else if (current >= total - 2) {
+      pageNumbers = [1, '...', total - 3, total - 2, total - 1, total];
+    } else {
+      pageNumbers = [1, '...', current - 1, current, current + 1, '...', total];
+    }
+  }
+  
+  const pageNumbersHtml = pageNumbers.map(p => {
+    if (p === '...') {
+      return `<span class="page-dots">...</span>`;
+    }
+    return `<button class="page-num ${p === current ? 'active' : ''}" onclick="goToPage(${p})">${p}</button>`;
+  }).join('');
+  
+  const prevText = currentLang === 'zh-TW' ? '上一頁' : 'Prev';
+  const nextText = currentLang === 'zh-TW' ? '下一頁' : 'Next';
+  const pageInfo = currentLang === 'zh-TW' 
+    ? `共 ${totalItems} 個提示詞` 
+    : `${totalItems} prompts`;
+  
+  container.innerHTML = `
+    <button class="page-btn prev" onclick="goToPage(${current - 1})" ${prevDisabled ? 'disabled' : ''}>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+      ${prevText}
+    </button>
+    <div class="page-numbers">
+      ${pageNumbersHtml}
+    </div>
+    <button class="page-btn next" onclick="goToPage(${current + 1})" ${nextDisabled ? 'disabled' : ''}>
+      ${nextText}
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+    <span class="page-info">${pageInfo}</span>
+  `;
+}
+
+function hidePagination() {
+  const container = document.getElementById('pagination');
+  if (container) {
+    container.style.display = 'none';
+  }
+}
+
+function goToPage(page) {
+  currentPage = page;
+  renderPrompts();
+  // Scroll to top of prompts container
+  document.getElementById('prompts-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // Image loading handlers
