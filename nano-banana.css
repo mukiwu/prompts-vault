@@ -1652,21 +1652,32 @@ body {
         z-index: 100;
     }
     
+    .detail-left {
+        padding-bottom: 16px;
+    }
+    
     .detail-image {
         min-height: 180px;
         max-height: 250px;
     }
     
     .detail-right {
-        padding: 16px;
+        padding: 20px 16px;
     }
     
     .detail-header {
-        margin-bottom: 16px;
+        margin-bottom: 20px;
+        padding-top: 8px;
+    }
+    
+    .detail-category {
+        margin-bottom: 12px;
     }
     
     .detail-header h2 {
         font-size: 20px;
+        line-height: 1.4;
+        margin-top: 8px;
     }
     
     .detail-section {
@@ -1898,6 +1909,32 @@ body {
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 1px;
+}
+
+/* Contact CTA (temporary until AdSense) */
+.ad-contact {
+    text-decoration: none;
+    border: 1px solid var(--border-subtle);
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+    transition: var(--transition-fast);
+    cursor: pointer;
+}
+
+.ad-contact:hover {
+    border-color: var(--banana-yellow);
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 214, 0, 0.15);
+}
+
+.ad-contact-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    transition: var(--transition-fast);
+}
+
+.ad-contact:hover .ad-contact-text {
+    color: var(--banana-yellow);
 }
 
 /* Top Banner Ad */
