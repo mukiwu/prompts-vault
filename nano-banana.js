@@ -769,9 +769,14 @@ function openDetail(id) {
   // Update comments section UI text
   document.getElementById('comments-title').textContent = t('comments');
   document.getElementById('reply-btn-text').textContent = t('reply');
-  document.getElementById('comments-loading').innerHTML = `
-    <div class="spinner"></div>
-    <span>${t('loadingComments')}</span>
+  
+  // Reset comments list with loading state
+  const commentsList = document.getElementById('comments-list');
+  commentsList.innerHTML = `
+    <div class="comments-loading">
+      <div class="spinner"></div>
+      <span>${t('loadingComments')}</span>
+    </div>
   `;
 
   // Set reply button link
@@ -830,12 +835,6 @@ function renderMarkdown(text) {
 // Load comments for an issue
 async function loadComments(issueId) {
   const commentsList = document.getElementById('comments-list');
-  const loadingEl = document.getElementById('comments-loading');
-  
-  // Show loading
-  loadingEl.style.display = 'flex';
-  commentsList.innerHTML = '';
-  commentsList.appendChild(loadingEl);
   
   try {
     const { owner, repo } = GITHUB_CONFIG;
@@ -853,7 +852,6 @@ async function loadComments(issueId) {
     }
     
     const comments = await response.json();
-    loadingEl.style.display = 'none';
     
     if (comments.length === 0) {
       commentsList.innerHTML = `
