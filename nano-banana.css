@@ -1573,10 +1573,28 @@ body {
     
     .detail-content {
         grid-template-columns: 1fr;
+        max-height: none;
+        overflow-y: auto;
+    }
+    
+    .detail-modal {
+        max-height: 95vh;
+        overflow-y: auto;
     }
     
     .detail-image {
         min-height: 200px;
+        max-height: 300px;
+    }
+    
+    .detail-right {
+        max-height: none;
+        overflow: visible;
+        padding: 24px;
+    }
+    
+    .detail-left {
+        position: relative;
     }
 }
 
@@ -1617,6 +1635,60 @@ body {
     
     .prompts-container {
         grid-template-columns: 1fr;
+    }
+    
+    /* Detail modal mobile */
+    .detail-modal {
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 0;
+    }
+    
+    .detail-close {
+        top: 10px;
+        right: 10px;
+        z-index: 100;
+    }
+    
+    .detail-image {
+        min-height: 180px;
+        max-height: 250px;
+    }
+    
+    .detail-right {
+        padding: 16px;
+    }
+    
+    .detail-header {
+        margin-bottom: 16px;
+    }
+    
+    .detail-header h2 {
+        font-size: 20px;
+    }
+    
+    .detail-section {
+        margin-bottom: 16px;
+    }
+    
+    .prompt-display {
+        min-height: 80px;
+        max-height: 200px;
+        font-size: 12px;
+    }
+    
+    .detail-actions {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .action-btn {
+        flex: 1;
+        min-width: 80px;
+        padding: 10px 12px;
+        font-size: 13px;
     }
 }
 
