@@ -776,7 +776,8 @@ function openDetail(id) {
 
   // Set reply button link
   const replyBtn = document.getElementById('reply-github-btn');
-  replyBtn.href = `https://github.com/${REPO_OWNER}/${REPO_NAME}/issues/${id}#issuecomment-new`;
+  const { owner, repo } = GITHUB_CONFIG;
+  replyBtn.href = `https://github.com/${owner}/${repo}/issues/${id}#issuecomment-new`;
 
   // Load comments
   loadComments(id);
@@ -837,8 +838,9 @@ async function loadComments(issueId) {
   commentsList.appendChild(loadingEl);
   
   try {
+    const { owner, repo } = GITHUB_CONFIG;
     const response = await fetch(
-      `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/issues/${issueId}/comments`,
+      `https://api.github.com/repos/${owner}/${repo}/issues/${issueId}/comments`,
       {
         headers: {
           'Accept': 'application/vnd.github.v3+json'
