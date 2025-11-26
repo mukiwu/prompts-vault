@@ -848,15 +848,13 @@ async function loadComments(issueId) {
   
   try {
     const { owner, repo } = GITHUB_CONFIG;
-    // Add timestamp to prevent caching
+    // Add timestamp to prevent caching (don't use Cache-Control header as it causes CORS issues)
     const response = await fetch(
       `https://api.github.com/repos/${owner}/${repo}/issues/${issueId}/comments?_t=${Date.now()}`,
       {
         headers: {
-          'Accept': 'application/vnd.github.v3+json',
-          'Cache-Control': 'no-cache'
-        },
-        cache: 'no-store'
+          'Accept': 'application/vnd.github.v3+json'
+        }
       }
     );
     
