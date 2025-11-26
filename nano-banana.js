@@ -62,6 +62,10 @@ const i18n = {
     // View
     gridView: '網格檢視',
     listView: '列表檢視',
+    // CTA & Banners
+    sharePrompt: '✨ 歡迎分享你的提示詞',
+    topBanner: '💬 有任何建議或想法？歡迎聯繫 MUKI',
+    bottomBanner: '🍌 喜歡這個網站嗎？追蹤 MUKI 獲取更多資訊',
     // Issue template
     issueTemplate: 'prompt-submission.yml'
   },
@@ -100,6 +104,10 @@ const i18n = {
     // View
     gridView: 'Grid View',
     listView: 'List View',
+    // CTA & Banners
+    sharePrompt: '✨ Share your prompt',
+    topBanner: '💬 Have suggestions or ideas? Contact MUKI',
+    bottomBanner: '🍌 Like this site? Follow MUKI for more',
     // Issue template
     issueTemplate: 'prompt-submission-en.yml'
   }
@@ -178,6 +186,24 @@ function updateUILanguage() {
     emptyState.querySelector('h3').textContent = t('noPrompts');
     emptyState.querySelector('p').textContent = t('noPromptsHint');
     emptyState.querySelector('.empty-add-btn').textContent = t('addFirstPrompt');
+  }
+
+  // Update share prompt CTA
+  const sharePromptText = document.getElementById('ad-submit-text');
+  if (sharePromptText) {
+    sharePromptText.textContent = t('sharePrompt');
+  }
+
+  // Update top banner
+  const topBannerText = document.getElementById('ad-top-text');
+  if (topBannerText) {
+    topBannerText.textContent = t('topBanner');
+  }
+
+  // Update bottom banner
+  const bottomBannerText = document.getElementById('ad-bottom-text');
+  if (bottomBannerText) {
+    bottomBannerText.textContent = t('bottomBanner');
   }
 
   // Re-render prompts to update card text

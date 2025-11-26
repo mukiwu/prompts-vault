@@ -139,8 +139,9 @@
 
   <!-- Ad Slot: Top Banner -->
   <div class="ad-container ad-top-banner" id="ad-top-banner">
-    <a href="https://www.facebook.com/mukispace" target="_blank" rel="noopener noreferrer" class="ad-placeholder ad-contact">
-      <span class="ad-contact-text">💬 有任何建議或想法？歡迎聯繫 MUKI</span>
+    <a href="https://www.facebook.com/mukispace" target="_blank" rel="noopener noreferrer"
+      class="ad-placeholder ad-contact">
+      <span class="ad-contact-text" id="ad-top-text">💬 有任何建議或想法？歡迎聯繫 MUKI</span>
     </a>
   </div>
 
@@ -163,8 +164,9 @@
 
   <!-- Ad Slot: Bottom Banner -->
   <div class="ad-container ad-bottom-banner" id="ad-bottom-banner">
-    <a href="https://www.facebook.com/mukispace" target="_blank" rel="noopener noreferrer" class="ad-placeholder ad-contact">
-      <span class="ad-contact-text">🍌 喜歡這個網站嗎？追蹤 MUKI 獲取更多資訊</span>
+    <a href="https://www.facebook.com/mukispace" target="_blank" rel="noopener noreferrer"
+      class="ad-placeholder ad-contact">
+      <span class="ad-contact-text" id="ad-bottom-text">🍌 喜歡這個網站嗎？追蹤 MUKI 獲取更多資訊</span>
     </a>
   </div>
 
@@ -327,8 +329,8 @@
 
           <!-- Ad Slot: Detail Modal -->
           <div class="ad-container ad-detail" id="ad-detail">
-            <a href="https://www.facebook.com/mukispace" target="_blank" rel="noopener noreferrer" class="ad-placeholder ad-contact">
-              <span class="ad-contact-text">✨ 想分享你的提示詞？聯繫 MUKI</span>
+            <a href="#" id="ad-submit-prompt" class="ad-placeholder ad-contact" onclick="openSubmitPage(); return false;">
+              <span class="ad-contact-text" id="ad-submit-text">✨ 歡迎分享你的提示詞</span>
             </a>
           </div>
         </div>
@@ -357,7 +359,7 @@
     <div class="lightbox-counter" id="lightbox-counter"></div>
   </div>
 
-  <script src="nano-banana.js?v=1.2.2"></script>
+  <script src="nano-banana.js?v=1.2.4"></script>
 </body>
 
 </html>
