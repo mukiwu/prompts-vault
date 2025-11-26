@@ -702,8 +702,11 @@ function hidePagination() {
 function goToPage(page) {
   currentPage = page;
   renderPrompts();
-  // Scroll to top of prompts container
-  document.getElementById('prompts-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Scroll to top of prompts container, accounting for fixed header height (76.2px + some padding)
+  const container = document.getElementById('prompts-container');
+  const headerHeight = 80;
+  const targetPosition = container.getBoundingClientRect().top + window.scrollY - headerHeight;
+  window.scrollTo({ top: targetPosition, behavior: 'smooth' });
 }
 
 // Image loading handlers
