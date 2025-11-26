@@ -838,12 +838,15 @@ async function loadComments(issueId) {
   
   try {
     const { owner, repo } = GITHUB_CONFIG;
+    // Add timestamp to prevent caching
     const response = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/issues/${issueId}/comments`,
+      `https://api.github.com/repos/${owner}/${repo}/issues/${issueId}/comments?_t=${Date.now()}`,
       {
         headers: {
-          'Accept': 'application/vnd.github.v3+json'
-        }
+          'Accept': 'application/vnd.github.v3+json',
+          'Cache-Control': 'no-cache'
+        },
+        cache: 'no-store'
       }
     );
     
@@ -852,16 +855,17 @@ async function loadComments(issueId) {
     }
     
     const comments = await response.json();
+    const commentsSection = document.getElementById('detail-comments');
     
+    // Hide entire section if no comments
     if (comments.length === 0) {
-      commentsList.innerHTML = `
-        <div class="no-comments">
-          <span>💬</span>
-          <p>${t('noComments')}</p>
-        </div>
-      `;
+      commentsSection.style.display = 'none';
       return;
     }
+    
+    // Show section and update count in header
+    commentsSection.style.display = 'block';
+    document.getElementById('comments-title').textContent = `💬 ${t('comments')} (${comments.length})`;
     
     commentsList.innerHTML = comments.map(comment => `
       <div class="comment">
@@ -880,13 +884,8 @@ async function loadComments(issueId) {
     
   } catch (error) {
     console.error('Error loading comments:', error);
-    loadingEl.style.display = 'none';
-    commentsList.innerHTML = `
-      <div class="no-comments">
-        <span>⚠️</span>
-        <p>${currentLang === 'zh-TW' ? '無法載入留言' : 'Failed to load comments'}</p>
-      </div>
-    `;
+    // Hide section on error
+    document.getElementById('detail-comments').style.display = 'none';
   }
 }
 
