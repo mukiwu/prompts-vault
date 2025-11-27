@@ -314,6 +314,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initEventListeners();
   updateUILanguage();
   loadPromptsFromGitHub();
+  
+  // Handle initial route
+  handleRoute();
 });
 
 // ==========================================
@@ -775,16 +778,83 @@ function openModal(id) {
 function closeModal(id) {
   document.getElementById(id).classList.remove('active');
   document.body.style.overflow = '';
+  
+  // Clear URL hash when closing detail modal
+  if (id === 'detail-overlay' && window.location.hash.startsWith('#/prompt/')) {
+    history.pushState({}, '', window.location.pathname);
+  }
 }
+
+// ==========================================
+// ==========================================
+// Routing
+// ==========================================
+
+function updateURL(id) {
+  if (id) {
+    history.pushState({ promptId: id }, '', `#/prompt/${id}`);
+  } else {
+    history.pushState({}, '', window.location.pathname);
+  }
+}
+
+function handleRoute() {
+  const hash = window.location.hash;
+  const match = hash.match(/^#\/prompt\/(\d+)$/);
+  
+  if (match) {
+    const promptId = parseInt(match[1], 10);
+    // Wait for prompts to load if needed
+    if (prompts.length > 0) {
+      openDetailFromRoute(promptId);
+    } else {
+      // Prompts not loaded yet, wait and retry
+      const checkInterval = setInterval(() => {
+        if (prompts.length > 0) {
+          clearInterval(checkInterval);
+          openDetailFromRoute(promptId);
+        }
+      }, 100);
+      // Timeout after 5 seconds
+      setTimeout(() => clearInterval(checkInterval), 5000);
+    }
+  }
+}
+
+function openDetailFromRoute(id) {
+  const prompt = prompts.find(p => p.id === id);
+  if (prompt) {
+    openDetail(id, true); // true = from route, don't update URL
+  }
+}
+
+// Listen for browser back/forward
+window.addEventListener('popstate', (e) => {
+  if (e.state && e.state.promptId) {
+    openDetailFromRoute(e.state.promptId);
+  } else {
+    // Close modal if open
+    const overlay = document.getElementById('detail-overlay');
+    if (overlay && overlay.classList.contains('active')) {
+      closeModal('detail-overlay');
+    }
+  }
+});
 
 // ==========================================
 // Detail View
 // ==========================================
-function openDetail(id) {
+function openDetail(id, fromRoute = false) {
   const prompt = prompts.find(p => p.id === id);
   if (!prompt) return;
 
   currentPromptId = id;
+  
+  // Update URL (unless coming from route)
+  if (!fromRoute) {
+    updateURL(id);
+  }
+  
   trackEvent('view_prompt', {
     prompt_id: id,
     prompt_title: prompt.title,
