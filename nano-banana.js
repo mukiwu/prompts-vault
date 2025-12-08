@@ -314,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initEventListeners();
   updateUILanguage();
   loadPromptsFromGitHub();
-  
+
   // Handle initial route
   handleRoute();
 });
@@ -374,9 +374,18 @@ function parseIssueToPrompt(issue) {
     const body = issue.body || '';
 
     // Parse the Issue body (from GitHub Issue Form)
-    const getValue = (label) => {
-      const regex = new RegExp(`### ${label}\\s*\\n([\\s\\S]*?)(?=\\n*###|$)`, 'i');
-      const match = body.match(regex);
+    // Support both Chinese and English field labels
+    const getValue = (labelZh, labelEn = null) => {
+      // Try Chinese label first
+      let regex = new RegExp(`### ${labelZh}\\s*\\n([\\s\\S]*?)(?=\\n*###|$)`, 'i');
+      let match = body.match(regex);
+
+      // If not found and English label provided, try English
+      if (!match && labelEn) {
+        regex = new RegExp(`### ${labelEn}\\s*\\n([\\s\\S]*?)(?=\\n*###|$)`, 'i');
+        match = body.match(regex);
+      }
+
       if (!match) return '';
       // Clean up the value - remove empty lines and trim
       let value = match[1].trim();
@@ -387,13 +396,13 @@ function parseIssueToPrompt(issue) {
       return value;
     };
 
-    const title = getValue('提示詞名稱') || issue.title.replace('[Prompt]', '').trim();
-    const prompt = getValue('提示詞內容');
-    const categoryName = getValue('分類');
-    const tagsStr = getValue('標籤');
-    const imageContent = getValue('預覽圖片（選填）') || getValue('預覽圖片網址（選填）');
-    const author = getValue('作者名稱（選填）');
-    const authorUrl = getValue('作者網站（選填）');
+    const title = getValue('提示詞名稱', 'Prompt Name') || issue.title.replace('[Prompt]', '').trim();
+    const prompt = getValue('提示詞內容', 'Prompt Content');
+    const categoryName = getValue('分類', 'Category');
+    const tagsStr = getValue('標籤', 'Tags');
+    const imageContent = getValue('預覽圖片（選填）', 'Preview Image \\(Optional\\)') || getValue('預覽圖片網址（選填）');
+    const author = getValue('作者名稱（選填）', 'Author Name \\(Optional\\)');
+    const authorUrl = getValue('作者網站（選填）', 'Author Website \\(Optional\\)');
 
     if (!prompt) return null;
 
@@ -574,18 +583,18 @@ function renderPrompts() {
   }
 
   emptyState.style.display = 'none';
-  
+
   // Pagination
   const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
   if (currentPage > totalPages) currentPage = totalPages;
   if (currentPage < 1) currentPage = 1;
-  
+
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const paginatedPrompts = filtered.slice(startIndex, endIndex);
-  
+
   container.innerHTML = paginatedPrompts.map(renderPromptCard).join('');
-  
+
   // Render pagination
   renderPagination(currentPage, totalPages, filtered.length);
 }
@@ -635,21 +644,21 @@ function renderPromptCard(prompt) {
 function renderPagination(current, total, totalItems) {
   const container = document.getElementById('pagination');
   if (!container) return;
-  
+
   if (total <= 1) {
     container.style.display = 'none';
     return;
   }
-  
+
   container.style.display = 'flex';
-  
+
   const prevDisabled = current <= 1;
   const nextDisabled = current >= total;
-  
+
   // Generate page numbers
   let pageNumbers = [];
   const maxVisible = 5;
-  
+
   if (total <= maxVisible) {
     for (let i = 1; i <= total; i++) pageNumbers.push(i);
   } else {
@@ -661,20 +670,20 @@ function renderPagination(current, total, totalItems) {
       pageNumbers = [1, '...', current - 1, current, current + 1, '...', total];
     }
   }
-  
+
   const pageNumbersHtml = pageNumbers.map(p => {
     if (p === '...') {
       return `<span class="page-dots">...</span>`;
     }
     return `<button class="page-num ${p === current ? 'active' : ''}" onclick="goToPage(${p})">${p}</button>`;
   }).join('');
-  
+
   const prevText = currentLang === 'zh-TW' ? '上一頁' : 'Prev';
   const nextText = currentLang === 'zh-TW' ? '下一頁' : 'Next';
-  const pageInfo = currentLang === 'zh-TW' 
-    ? `共 ${totalItems} 個提示詞` 
+  const pageInfo = currentLang === 'zh-TW'
+    ? `共 ${totalItems} 個提示詞`
     : `${totalItems} prompts`;
-  
+
   container.innerHTML = `
     <button class="page-btn prev" onclick="goToPage(${current - 1})" ${prevDisabled ? 'disabled' : ''}>
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -778,7 +787,7 @@ function openModal(id) {
 function closeModal(id) {
   document.getElementById(id).classList.remove('active');
   document.body.style.overflow = '';
-  
+
   // Clear URL hash when closing detail modal
   if (id === 'detail-overlay' && window.location.hash.startsWith('#/prompt/')) {
     history.pushState({}, '', window.location.pathname);
@@ -801,7 +810,7 @@ function updateURL(id) {
 function handleRoute() {
   const hash = window.location.hash;
   const match = hash.match(/^#\/prompt\/(\d+)$/);
-  
+
   if (match) {
     const promptId = parseInt(match[1], 10);
     // Wait for prompts to load if needed
@@ -849,12 +858,12 @@ function openDetail(id, fromRoute = false) {
   if (!prompt) return;
 
   currentPromptId = id;
-  
+
   // Update URL (unless coming from route)
   if (!fromRoute) {
     updateURL(id);
   }
-  
+
   trackEvent('view_prompt', {
     prompt_id: id,
     prompt_title: prompt.title,
@@ -944,7 +953,7 @@ function openDetail(id, fromRoute = false) {
 
   // Update comments section UI text
   document.getElementById('comments-title').textContent = t('comments');
-  
+
   // Reset comments list with loading state
   const commentsList = document.getElementById('comments-list');
   commentsList.innerHTML = `
@@ -970,35 +979,35 @@ let currentDetailImageIndex = 0;
 // Simple Markdown renderer
 function renderMarkdown(text) {
   if (!text) return '';
-  
+
   let html = escapeHtml(text);
-  
+
   // Code blocks (```)
   html = html.replace(/```(\w*)\n?([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
-  
+
   // Inline code (`)
   html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-  
+
   // Bold (**text** or __text__)
   html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
   html = html.replace(/__([^_]+)__/g, '<strong>$1</strong>');
-  
+
   // Italic (*text* or _text_)
   html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
   html = html.replace(/_([^_]+)_/g, '<em>$1</em>');
-  
+
   // Strikethrough (~~text~~)
   html = html.replace(/~~([^~]+)~~/g, '<del>$1</del>');
-  
+
   // Links [text](url)
   html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
-  
+
   // Images ![alt](url) - render as links to avoid loading issues
   html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">🖼️ $1</a>');
-  
+
   // Line breaks
   html = html.replace(/\n/g, '<br>');
-  
+
   return html;
 }
 
@@ -1011,7 +1020,7 @@ function toggleComments() {
 // Load comments for an issue
 async function loadComments(issueId) {
   const commentsList = document.getElementById('comments-list');
-  
+
   try {
     const { owner, repo } = GITHUB_CONFIG;
     // Add timestamp to prevent caching (don't use Cache-Control header as it causes CORS issues)
@@ -1023,24 +1032,24 @@ async function loadComments(issueId) {
         }
       }
     );
-    
+
     if (!response.ok) {
       throw new Error('Failed to load comments');
     }
-    
+
     const comments = await response.json();
     const commentsSection = document.getElementById('detail-comments');
-    
+
     // Hide entire section if no comments
     if (comments.length === 0) {
       commentsSection.style.display = 'none';
       return;
     }
-    
+
     // Show section and update count in header
     commentsSection.style.display = 'block';
     document.getElementById('comments-title').textContent = `💬 ${t('comments')} (${comments.length})`;
-    
+
     commentsList.innerHTML = comments.map(comment => `
       <div class="comment">
         <div class="comment-header">
@@ -1055,7 +1064,7 @@ async function loadComments(issueId) {
         </div>
       </div>
     `).join('');
-    
+
   } catch (error) {
     console.error('Error loading comments:', error);
     // Hide section on error
@@ -1069,7 +1078,7 @@ function formatDate(dateString) {
   const now = new Date();
   const diffMs = now - date;
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  
+
   if (diffDays === 0) {
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     if (diffHours === 0) {
@@ -1243,28 +1252,28 @@ let lightboxIndex = 0;
 
 function openLightbox(images, startIndex = 0) {
   if (!images || images.length === 0) return;
-  
+
   lightboxImages = images;
   lightboxIndex = startIndex;
-  
+
   const overlay = document.getElementById('lightbox-overlay');
   const img = document.getElementById('lightbox-image');
   const loader = document.getElementById('lightbox-loader');
   const counter = document.getElementById('lightbox-counter');
   const prevBtn = document.getElementById('lightbox-prev');
   const nextBtn = document.getElementById('lightbox-next');
-  
+
   // Show loading, hide image
   img.classList.remove('loaded');
   if (loader) loader.classList.remove('hidden');
-  
+
   // Load image
   img.onload = () => {
     img.classList.add('loaded');
     if (loader) loader.classList.add('hidden');
   };
   img.src = getOptimizedUrl(lightboxImages[lightboxIndex], 1200);
-  
+
   // Update counter
   if (lightboxImages.length > 1) {
     counter.textContent = `${lightboxIndex + 1} / ${lightboxImages.length}`;
@@ -1276,11 +1285,11 @@ function openLightbox(images, startIndex = 0) {
     prevBtn.style.display = 'none';
     nextBtn.style.display = 'none';
   }
-  
+
   updateLightboxNav();
   overlay.classList.add('active');
   document.body.style.overflow = 'hidden';
-  
+
   trackEvent('open_lightbox', { image_count: lightboxImages.length });
 }
 
@@ -1288,10 +1297,10 @@ function closeLightbox() {
   const overlay = document.getElementById('lightbox-overlay');
   const img = document.getElementById('lightbox-image');
   const loader = document.getElementById('lightbox-loader');
-  
+
   overlay.classList.remove('active');
   document.body.style.overflow = '';
-  
+
   // Clear image after animation completes to prevent showing old image
   setTimeout(() => {
     img.src = '';
@@ -1318,18 +1327,18 @@ function updateLightboxImage() {
   const img = document.getElementById('lightbox-image');
   const loader = document.getElementById('lightbox-loader');
   const counter = document.getElementById('lightbox-counter');
-  
+
   // Show loading
   img.classList.remove('loaded');
   if (loader) loader.classList.remove('hidden');
-  
+
   // Load new image
   img.onload = () => {
     img.classList.add('loaded');
     if (loader) loader.classList.add('hidden');
   };
   img.src = getOptimizedUrl(lightboxImages[lightboxIndex], 1200);
-  
+
   counter.textContent = `${lightboxIndex + 1} / ${lightboxImages.length}`;
   updateLightboxNav();
 }
@@ -1337,7 +1346,7 @@ function updateLightboxImage() {
 function updateLightboxNav() {
   const prevBtn = document.getElementById('lightbox-prev');
   const nextBtn = document.getElementById('lightbox-next');
-  
+
   prevBtn.disabled = lightboxIndex === 0;
   nextBtn.disabled = lightboxIndex === lightboxImages.length - 1;
 }
@@ -1348,11 +1357,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeBtn = document.getElementById('lightbox-close');
   const prevBtn = document.getElementById('lightbox-prev');
   const nextBtn = document.getElementById('lightbox-next');
-  
+
   if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
   if (prevBtn) prevBtn.addEventListener('click', lightboxPrev);
   if (nextBtn) nextBtn.addEventListener('click', lightboxNext);
-  
+
   if (overlay) {
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) {
@@ -1360,11 +1369,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-  
+
   // Keyboard navigation
   document.addEventListener('keydown', (e) => {
     if (!document.getElementById('lightbox-overlay')?.classList.contains('active')) return;
-    
+
     if (e.key === 'Escape') closeLightbox();
     if (e.key === 'ArrowLeft') lightboxPrev();
     if (e.key === 'ArrowRight') lightboxNext();
